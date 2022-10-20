@@ -153,7 +153,9 @@ Three new terminal windows will pop up, corresponding to *Step 3.2, 3.3 and 3.4*
 
   If the calibration board use is **dark** (default as white), add `isDarkBoard:=true`. If the **compressed** image topic is used, add `ifCompressed:=true`. `ns_` is the node namespace, defined by users.
 
-The program will display the raw image, the undistorted image, the grayed image (visual camera scene) and the result image of circle-center-detection.
+The program will display the raw image, the undistorted image, the grayed image (visual camera scene) and the result image of circle-center-detection:
+
+![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_camera.png)
 
 **Tips**: If it dose not detect the feature point, please consider whether the calibration board is not heated enough (thermal camera scene), the calibration board is placed at an improper angle or other reasons.
 
@@ -167,11 +169,15 @@ roslaunch lvt2calib (liadr_type)_pattern.launch cloud_in_tp:=(topic of point clo
 
 `lidar_type` is the type of LiDAR you use. Please refer to the table in *Appendix*.
 
-The program will output the target board founded and four circle centers extracted, if the automatic calibration board detection is successful. Results can be viewed in *Rviz*. The description of each topic can be referred in **topics_breif.txt** (TBC...).
+The program will output the target board founded and four circle centers extracted (after the user starts the feature collection), if the automatic calibration board detection is successful. Results can be viewed in *Rviz*. The description of each topic can be referred in **topics_breif.txt** (TBC...). This picture takes a suite of a Livox Mid70 LiDAR and an Ouster OS1-32 as an example.
+
+![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_laser.png)
 
 You can use passthrough filter to reduce the point cloud size before this step (by setting `use_passthrough_preprocess:=true`), which will speed up this process.
 
-**Tips**: It is recommended to check the topic `/(ns_)/laser_pattern/calib_board_cloud` to make sure the target board can be successfully detected, and then proceed to the subsequent operation.
+**Tips**: It is recommended to check the topic `/(ns_)/laser_pattern/calib_board_cloud` to make sure the target board can be successfully detected as shown in the following picture, and then proceed to the subsequent operation.
+
+![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_board_laser.png)
 
 #### 3.4 Feature Data Collection
 
