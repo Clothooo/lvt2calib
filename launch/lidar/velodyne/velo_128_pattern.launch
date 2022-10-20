@@ -1,0 +1,13 @@
+<launch>
+
+    <arg name="ns_" default="velo_128"/>
+    <arg name="use_passthrough_preprocess" default="false"/>
+    <arg name="cloud_tp" default="/velodyne_points"/>
+
+    <include file="$(find lvt2calib)/launch/lidar/velodyne_pattern.launch">
+        <arg name="ns_" value="$(arg ns_)"/>
+        <arg name="use_passthrough_preprocess" value="$(arg use_passthrough_preprocess)"/>
+        <arg name="cloud_tp" value="$(arg cloud_tp)"/>
+        <arg name="laser_ring_num" value="128"/>
+    </include>
+</launch>

@@ -1,0 +1,54 @@
+<launch>
+  <param name="use_sim_time" value="false"/>
+  <param name="pause_process" type="bool" value="false"/>
+  <param name="end_process" type="bool" value="false"/>
+  <param name="cam_paused" type="bool" value="false"/>
+  
+  <arg name="ifCompressed" default="false"/>
+  <arg name="image_tp" default="/thermal_cam/thermal_image"/>
+  <arg name="cam_info_dir" default="$(find lvt2calib)/data/camera_info/intrinsic.txt"/>
+  <arg name="ns_" default="camera"/>
+
+  <!-- camera type -->
+  <!-- false: thermal   
+      ture: rgb -->
+  <arg name="isRGB" default="false"/>
+
+  <!-- board type -->
+  <!-- false: light borad with dark hole
+        true: dark borad with light hole -->
+  <arg name="isDarkBoard" default="false"/>
+
+  <group ns="$(arg ns_)">
+    <!-- Decompress image -->
+    <group if="$(arg ifCompressed)">
+      <node name="decompress_image" pkg="image_transport" type="republish" args="compressed in:=$(arg image_tp) raw out:=$(arg image_tp)" />
+    </group>
+    
+    <!-- Main node -->
+    <node name="cam_pattern" pkg="lvt2calib" type="cam_pattern" output="screen">
+      <param name="image_tp" value="$(arg image_tp)"/>
+      <param name="camera_info_dir" type="string" value="$(arg cam_info_dir)"/>
+      <param name="ns_" value="$(arg ns_)"/>
+      <param name="is_rgb" value="$(arg isRGB)"/>
+      <param name="use_darkboard" value="$(arg isDarkBoard)" />
+
+      <param name="min_centers_found" type="int" value="4"/>
+      <param name="centroid_dis_min" type="double" value="0.15"/>
+      <param name="centroid_dis_max" type="double" value="0.25"/>
+      <param name="center_dis_min" type="double" value="0.1"/>
+      <param name="center_dis_max" type="double" value="0.48"/>
+
+      <rosparam>
+        minCircularity: 0.8
+        minInertiaRatio: 0.1
+        minArea: 50
+      </rosparam>
+
+    </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="stereo_ros_tf" args="0 0 0 -1.57079632679 0 -1.57079632679 stereo stereo_camera 100"/>
+
+  </group>
+
+</launch>

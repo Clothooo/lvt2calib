@@ -1,0 +1,18 @@
+<launch>
+
+    <arg name="ns_" default="livox_horizon"/>
+    <arg name="use_passthrough_preprocess" default="false"/>
+    <arg name="cloud_tp" default="/livox/lidar"/>
+
+    <include file="$(find lvt2calib)/launch/point_cloud_accumulation.launch">
+        <arg name="cloud_in_pc2" value="$(arg cloud_tp)"/>
+        <arg name="acc_num" value="5"/>
+        <arg name="ns_" value="$(arg ns_)"/>
+    </include>
+    
+    <include file="$(find lvt2calib)/launch/lidar/livox_pattern.launch">
+        <arg name="ns_" value="$(arg ns_)"/>
+        <arg name="use_passthrough_preprocess" value="$(arg use_passthrough_preprocess)"/>
+        <arg name="cloud_tp" value="$(arg cloud_tp)/acc_cloud"/>
+    </include>
+</launch>

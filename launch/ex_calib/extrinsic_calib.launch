@@ -1,0 +1,32 @@
+<launch>
+
+    <arg name="useDemo" default="false"/>
+    <arg name="is_multi_exp" default="false"/>
+    <arg name="is_auto_mode" default="false"/>
+	<arg name="cam_info_path" default="$(find lvt2calib)/data/camera_info/intrinsic.txt"/>
+    <arg name="ns_s1" default="laser"/>
+    <arg name="ns_s2" default="camera"/>
+    <arg name="l2c_calib" default="false"/>
+    <arg name="l2l_calib" default="false"/>
+
+    <group if="$(arg l2c_calib)">
+        <include file="$(find lvt2calib)/launch/ex_calib/extrinsic_calib_l2c.launch">
+            <arg name="useDemo" value="$(arg useDemo)"/>
+            <arg name="is_auto_mode" value="$(arg is_auto_mode)"/>
+            <arg name="is_multi_exp" value="$(arg is_multi_exp)"/>
+            <arg name="cam_info_path" value="$(arg cam_info_path)"/>
+            <arg name="ns_l" value="$(arg ns_s1)"/>
+            <arg name="ns_c" value="$(arg ns_s2)"/>
+        </include>
+    </group>
+  
+    <group if="$(arg l2l_calib)">
+        <include file="$(find lvt2calib)/launch/ex_calib/extrinsic_calib_l2l.launch">
+            <arg name="useDemo" value="$(arg useDemo)"/>
+            <arg name="is_auto_mode" value="$(arg is_auto_mode)"/>
+            <arg name="is_multi_exp" value="$(arg is_multi_exp)"/>
+            <arg name="ns_l1" value="$(arg ns_s1)"/>
+            <arg name="ns_l2" value="$(arg ns_s2)"/>
+        </include>
+    </group>
+</launch> 

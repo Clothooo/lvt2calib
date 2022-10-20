@@ -1,0 +1,18 @@
+<launch>
+  <arg name="ifCompressed" default="false"/>
+  <arg name="image_tp" default="/thermal_cam/thermal_image"/>
+  <arg name="cam_info_dir" default="$(find lvt2calib)/data/camera_info/intrinsic.txt"/>
+  <arg name="isDarkBoard" default="false"/>
+  <arg name="ns_" default="rgb"/>
+
+  <include file="$(find lvt2calib)/launch/camera/cam_pattern.launch">
+    <arg name="isRGB" value="true"/>
+    <arg name="isDarkBoard" value="$(arg isDarkBoard)"/>
+    <arg name="ns_" value="$(arg ns_)"/>
+    
+    <arg name="cam_info_dir" value="$(arg cam_info_dir)"/>
+    <arg name="image_tp" value="$(arg image_tp)"/>
+    <arg name="ifCompressed" value="$(arg ifCompressed)"/>
+  </include>
+
+</launch>

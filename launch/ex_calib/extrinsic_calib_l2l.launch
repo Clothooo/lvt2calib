@@ -1,0 +1,28 @@
+<launch>
+    <arg name="stdout" default="screen"/>
+    <arg name="useDemo" default="false"/>
+    <arg name="is_multi_exp" default="false"/>
+    <arg name="is_auto_mode" default="false"/>
+    <arg name="ns_l1" default="laser1"/>
+    <arg name="ns_l2" default="laser2"/>
+    <arg name="featureFileName" default="features_info_$(arg ns_l1)_to_$(arg ns_l2)"/>
+    <arg name="calib_result_name" default="$(arg ns_l1)_to_$(arg ns_l2)"/>
+
+    <node pkg="lvt2calib" type="extrinsic_calib_l2l" name="extrinsic_calib_l2l" output="screen">
+        <param name="ns_l1" value="$(arg ns_l1)"/>
+        <param name="ns_l2" value="$(arg ns_l2)"/>
+        <param name="save_calib_file" value="true"/>
+        <param name="is_multi_exp" value="$(arg is_multi_exp)"/>
+        <param name="is_auto_mode" value="$(arg is_auto_mode)"/>
+       
+        <!-- for Demo -->
+        <param name="calib_result_dir_" type="string" value="$(find lvt2calib)/data/demo/calibration_result/" if="$(arg useDemo)"/>
+        <param name="features_info_dir_" type="string" value="$(find lvt2calib)/data/demo/pattern_collection_result/features_info_demo.csv" if="$(arg useDemo)"/>
+        
+        <!-- for applictaion -->
+        <param name="calib_result_dir_" type="string" value="$(find lvt2calib)/data/calibration_result/" unless="$(arg useDemo)"/>
+        <param name="features_info_dir_" type="string" value="$(find lvt2calib)/data/pattern_collection_result/$(arg featureFileName).csv" unless="$(arg useDemo)"/> 
+        <param name="calib_result_name_" type="string" value="$(arg calib_result_name)" unless="$(arg useDemo)"/>
+       
+    </node>
+</launch> 

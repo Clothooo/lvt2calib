@@ -1,0 +1,31 @@
+<launch>
+    <arg name="stdout" default="screen"/>
+    <arg name="useDemo" default="false"/>
+    <arg name="is_multi_exp" default="false"/>
+    <arg name="is_auto_mode" default="false"/>
+	<arg name="cam_info_path" default="$(find lvt2calib)/data/camera_info/intrinsic.txt"/>
+    <arg name="ns_l" default="laser"/>
+    <arg name="ns_c" default="camera"/>
+    <arg name="featureFileName" default="features_info_$(arg ns_l)_to_$(arg ns_c)"/>
+    <arg name="calib_result_name" default="$(arg ns_l)_to_$(arg ns_c)"/>
+
+    <node pkg="lvt2calib" type="extrinsic_calib_l2c" name="extrinsic_calib_l2c" output="screen">
+        <param name="ns_l" value="$(arg ns_l)"/>
+        <param name="ns_c" value="$(arg ns_c)"/>
+        <param name="save_calib_file" value="true"/>
+        <param name="is_multi_exp" value="$(arg is_multi_exp)"/>
+        <param name="is_auto_mode" value="$(arg is_auto_mode)"/>
+       
+        <!-- for Demo -->
+        <param name="calib_result_dir_" type="string" value="$(find lvt2calib)/data/demo/calibration_result/" if="$(arg useDemo)"/>
+        <param name="camera_info_dir_" type="string" value="$(find lvt2calib)/data/camera_info/optris_demo.txt" if="$(arg useDemo)"/>
+        <param name="features_info_dir_" type="string" value="$(find lvt2calib)/data/demo/pattern_collection_result/features_info_demo.csv" if="$(arg useDemo)"/>
+        
+        <!-- for applictaion -->
+        <param name="calib_result_dir_" type="string" value="$(find lvt2calib)/data/calibration_result/" unless="$(arg useDemo)"/>
+        <param name="camera_info_dir_" type="string" value="$(arg cam_info_path)" unless="$(arg useDemo)"/>
+        <param name="features_info_dir_" type="string" value="$(find lvt2calib)/data/pattern_collection_result/$(arg featureFileName).csv" unless="$(arg useDemo)"/> 
+        <param name="calib_result_name_" type="string" value="$(arg calib_result_name)" unless="$(arg useDemo)"/>
+       
+    </node>
+</launch> 

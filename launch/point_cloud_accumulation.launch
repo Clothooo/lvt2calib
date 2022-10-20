@@ -1,0 +1,23 @@
+<launch>
+    <!-- THis is comment -->
+    <!-- point cloud accumuation -->
+    <!-- do time integration of point cloud -->
+    <!-- input: cloud topic (sensor_msgs/PointCloud & sensor_msgs/PointCloud2) -->
+    <!-- output: accmulated point cloud ($(arg cloud_in)/acc_cloud) -->
+    <!-- acc_num: number of frames of point cloud to accmulate -->
+
+    <param name="use_sim_time" value="false"/>
+
+    <arg name="cloud_in_pc" default="/"/>
+    <arg name="cloud_in_pc2" default="/livox/lidar"/>
+    <arg name="acc_num" default="5"/>
+    <arg name="ns_" default="/"/>
+
+    <group ns="$(arg ns_)">
+      <node name="point_cloud_accumulation" pkg="lvt2calib" type="point_cloud_accumulation" output="screen">
+        <param name="cloud_in_pc2" value="$(arg cloud_in_pc2)"/>
+        <!-- <param name="cloud_in_pc" value="$(arg cloud_in_pc)"/> -->
+        <param name="acc_num" value="$(arg acc_num)"/>
+      </node>
+    </group>
+</launch>

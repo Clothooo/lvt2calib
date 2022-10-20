@@ -1,0 +1,24 @@
+<launch>
+    <!-- the number of frames accumulated to do the calibration, default:60 -->
+    <arg name="ns_s1" default="laser"/>
+    <arg name="ns_s2" default="camera"/>
+    <arg name="max_frame" default="60"/>
+    <arg name="l2c_calib" default="false"/>
+    <arg name="l2l_calib" default="false"/>
+
+    <group if="$(arg l2c_calib)">
+        <include file="$(find lvt2calib)/launch/pattern_collection/pattern_collection_lc.launch">
+            <arg name="ns_l" value="$(arg ns_s1)"/>
+            <arg name="ns_c" value="$(arg ns_s2)"/>
+            <arg name="max_frame" value="$(arg max_frame)"/>
+        </include>
+    </group>
+
+    <group if="$(arg l2l_calib)">
+        <include file="$(find lvt2calib)/launch/pattern_collection/pattern_collection_ll.launch">
+            <arg name="ns_l1" value="$(arg ns_s1)"/>
+            <arg name="ns_l2" value="$(arg ns_s2)"/>
+            <arg name="max_frame" value="$(arg max_frame)"/>
+        </include>
+    </group>
+</launch>
