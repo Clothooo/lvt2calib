@@ -66,7 +66,7 @@ Some auxiliary node:
 
 <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/fed39af76a181cf84207adeda7cf71b.jpg" style="zoom: 50%;" />
 
-We use a four-circle plate which has the same size as the plate in our previous work. It is made by acrylic. Then, the back of the board is attached with the same size heating silicone pad to facilitate thermal imaging.
+We use a four-circle plate which has the same size as the plate in our previous work[[1]](https://ieeexplore.ieee.org/document/8961462) (also inspired by Guindel's work[[2]](https://ieeexplore.ieee.org.remotexs.ntu.edu.sg/document/8317829)). It is made by acrylic. Then, the back of the board is attached with the same size heating silicone pad to facilitate thermal imaging.
 
 <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/ThermalVoxCalib%20-%20fig_board.png" alt="ThermalVoxCalib - fig_board" style="zoom:80%;" />
 
@@ -244,7 +244,15 @@ This program will output the extrinsic parameters and error evaluation, and thes
 
   - `L2C_CalibLog.csv`: the log file of each extrinsic parameter calculation result and errors;
 
-    
+
+
+## Thanks
+
+[1] J. Zhang, R. Zhang, Y. Yue, C. Yang, M. Wen, and D. Wang, “Slat-calib: Extrinsic calibration between a sparse 3d lidar and a limited-fov low-resolution thermal camera,” in *2019 IEEE International Conference on Robotics and Biomimetics (ROBIO)*, pp. 648–653, 2019.
+
+[2] C. Guindel, J. Beltrán, D. Martín, and F. García, “Automatic extrinsic calibration for lidar-stereo vehicle sensor setups,” in *2017 IEEE 20th International Conference on Intelligent Transportation Systems (ITSC)*, pp. 1–6, Oct 2017.
+
+
 
 ## Appendix
 
@@ -283,3 +291,4 @@ TBC...
 #### III. Paper
 
 TBC...
+
