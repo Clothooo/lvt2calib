@@ -210,7 +210,7 @@ You can use passthrough filter to reduce the point cloud size before this step (
 
    If no, type 'n/N' and 'Enter' to end all the above programs. (Note: Please do not directly use *ctrl+c*).
 
-4. If collection ends and quit this process, a file `feature_info_(ns_s1)_to_(ns_s2).csv` and its copy (with a time suffix) will be saved in `(lvt2calib path)/data/pattern_collection/`.
+4. If collection ends and quit this process, a file `feature_info_(ns_s1)_to_(ns_s2).csv` and its copy (with a time suffix) will be saved in `(lvt2calib path)/data/pattern_collection_result/`.
 
 #### 3.5 Extrinsic Parameter Calculation
 
@@ -291,4 +291,8 @@ TBC...
 #### III. Paper
 
 TBC...
+
+
+
+
 
