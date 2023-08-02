@@ -299,11 +299,11 @@ If you find this work is useful for your research, please consider citing:
 ```
 @INPROCEEDINGS{ZhangLiu2023IV,
   author={Zhang, Jun and Liu, Yiyao and Wen, Mingxing and Yue, Yufeng and Zhang, Haoyuan and Wang, Danwei},
-  booktitle={35th IEEE Intelligent Vehicles Symposium (IV 2023)}, 
+  booktitle={2023 IEEE Intelligent Vehicles Symposium (IV)}, 
   title={L2V2T2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera}, 
   year={2023},
   volume={},
   number={},
-  pages={},
-  doi={}}
+  pages={1-7},
+  doi={10.1109/IV55152.2023.10186657}}
 ```
