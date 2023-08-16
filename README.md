@@ -290,12 +290,12 @@ TBC...
 
 #### III. Paper
 
-TBC...
+[L2V2T2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera](https://ieeexplore.ieee.org/document/10186657)
 
 
 
 ## Citation
-If you find this work is useful for your research, please consider citing:
+If you find this work useful for your research, please consider citing:
 ```
 @INPROCEEDINGS{ZhangLiu2023IV,
   author={Zhang, Jun and Liu, Yiyao and Wen, Mingxing and Yue, Yufeng and Zhang, Haoyuan and Wang, Danwei},
