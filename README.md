@@ -1,4 +1,4 @@
-# LVT2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera
+# (IV 2023) LVT2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera
 
 <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2_sensor_trans_fig.png" style="zoom:80%;" />
 
