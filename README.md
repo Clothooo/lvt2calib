@@ -44,6 +44,13 @@ catkin_make
 source devel/setup.bash
 ```
 
+Download the calibraiton rosbags from Onedrive [rosbag_lvt2calib](https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj):
+```
+https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj
+```
+![image](https://github.com/Clothooo/lvt2calib/assets/16817603/aa487b80-9d5d-43b0-9594-d08cae147581)
+
+
 #### 2.2 Program node brief
 
 This project includes the following nodes:
