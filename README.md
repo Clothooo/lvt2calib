@@ -27,7 +27,7 @@ Tested with Ubuntu 16.04 64-bit and Ubuntu 18.04 64-bit.
 - ROS (tested with kinetic/melodic)
 - PCL 1.8
 - [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page)
-- [Ceres-solver](http://ceres-solver.org/)
+- [Ceres-solver](http://ceres-solver.org/) 
 - OpenCV 3.3.1
 
 ### Step2: Preparation
