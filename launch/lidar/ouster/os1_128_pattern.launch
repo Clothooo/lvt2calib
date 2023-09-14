@@ -1,6 +1,6 @@
 <launch>
   
-    <arg name="ns_" default="ouster_128"/>
+    <arg name="ns_" default="os1_128"/>
     <arg name="use_passthrough_preprocess" default="false"/>
     <arg name="cloud_tp" default="/ouster/points"/>
 
@@ -9,6 +9,11 @@
         <arg name="use_passthrough_preprocess" value="$(arg use_passthrough_preprocess)"/>
         <arg name="cloud_tp" value="$(arg cloud_tp)"/>
         <arg name="laser_ring_num" value="128"/>
+        <arg name="cluster_tole" value="0.05"/>
+        <arg name="cluster_size_min" value="0.05"/>
+        <arg name="i_filter_out_max" value="30"/>
+        <arg name="rmse_ukn2tpl_thre" value="0.03"/>
+        <arg name="rmse_tpl2ukn_thre" value="0.03"/>
     </include>
  
 </launch>
