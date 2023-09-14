@@ -22,13 +22,13 @@ Install the ROS  environment and install the SDK and driver of the LiDAR you use
 
 #### 1.2 Denpendency
 
-Tested with Ubuntu 20.04 64-bit.
+Tested with Ubuntu 16.04 64-bit and Ubuntu 18.04 64-bit.
 
-- ROS noetic
-- PCL 1.10
+- ROS (tested with kinetic/melodic)
+- PCL 1.8
 - [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page)
-- [Ceres-solver](http://ceres-solver.org/) (1.14.0)
-- OpenCV 4.2.0
+- [Ceres-solver](http://ceres-solver.org/)
+- OpenCV 3.3.1
 
 ### Step2: Preparation
 

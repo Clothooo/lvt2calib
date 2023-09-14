@@ -75,7 +75,7 @@ Visualization Manager:
       Size (Pixels): 5
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /os1_64/laser_pattern/calib_board_cloud
+      Topic: /os_64/laser_pattern/calib_board_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -110,7 +110,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Flat Squares
-      Topic: /os1_64/laser_pattern/plane_segments
+      Topic: /os_64/laser_pattern/plane_segments
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -138,7 +138,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /os1_64/laser_pattern/icp_regist_boundary
+      Topic: /os_64/laser_pattern/icp_regist_boundary
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -166,7 +166,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /os1_64/laser_pattern/template_pc
+      Topic: /os_64/laser_pattern/template_pc
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -222,7 +222,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /os1_64/laser_pattern/colored_planes_pc
+      Topic: /os_64/laser_pattern/colored_planes_pc
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -250,7 +250,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /os1_64/laser_pattern/reload_cloud
+      Topic: /os_64/laser_pattern/reload_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -278,7 +278,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.05000000074505806
       Style: Spheres
-      Topic: /os1_64/laser_pattern_circle/centers_centroid_cloud
+      Topic: /os_64/laser_pattern_circle/centers_centroid_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -306,7 +306,7 @@ Visualization Manager:
       Size (Pixels): 5
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /os1_64/laser_pattern_circle/circle_center_cloud
+      Topic: /os_64/laser_pattern_circle/circle_center_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

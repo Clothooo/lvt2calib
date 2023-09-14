@@ -2,9 +2,10 @@
 #define AutoDetectLaser_H
 
 #define PCL_NO_RECOMPILE
-#define DEBUG1 1
+#define DEBUG 0
 #define DEBUG2 0
-// #define STATIC_ANALYSE
+#define DEBUG3 0
+// #define STATIC_ANALYSE 1
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/png_io.h>
@@ -245,7 +246,7 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
                 dis_z = maxP.z - minP.z;
         double volumn = dis_x * dis_y *dis_z;
         int block_num = ceill(volumn / 3000);
-        if(DEBUG1)
+        if(DEBUG)
         {   
             cout << "x_min = " << minP.x << "\tx_max = " << maxP.x << endl;
             cout << "source cloud volumn = " << volumn << "\tblock_num = " << block_num << endl;
@@ -277,7 +278,7 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
 
             *cloud2 += *block_filtered;
         }
-        if(DEBUG1) 
+        if(DEBUG) 
             cout << "PointCloud size after filter: " << cloud2->points.size() << endl;
     }
     else
@@ -339,7 +340,7 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
 
     pcl::ExtractIndices<PointType_> extract_plane;
     int seg_num = 0, pos_num = 0, true_pos_num = 0;
-    if(DEBUG1) cout << cluster_indices.size() << " clusters found from "  << cloud2->points.size() << " points in cloud" << endl;
+    if(DEBUG2) cout << cluster_indices.size() << " clusters found from "  << cloud2->points.size() << " points in cloud" << endl;
     
     for(auto it = cluster_indices.begin(); it < cluster_indices.end(); it++)
     {
@@ -353,7 +354,7 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
         cloud_cluster->height = 1;
         cloud_cluster->is_dense = true;
 
-        if(DEBUG1) ROS_WARN("PointCloud represneting the Cluster: %d data points.", cloud_cluster->points.size());
+        if(DEBUG) ROS_WARN("PointCloud represneting the Cluster: %d data points.", cloud_cluster->points.size());
         // if(auto_mode_) showPointXYZI(cloud_cluster, 1, "cloud cluster");
 
         // ------ voxel2 to uniform pcl ------
@@ -376,7 +377,7 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
             sor.setMeanK(sor_MeanK_);
             sor.setStddevMulThresh(sor_StddevMulThresh_);
             sor.filter(*cloud_s_filtered);
-            if(DEBUG1) cout << "cluster size after statistic filter = " << cloud_s_filtered->points.size() << endl;
+            if(DEBUG) cout << "cluster size after statistic filter = " << cloud_s_filtered->points.size() << endl;
             pcl::copyPointCloud(*cloud_s_filtered, *cloud_cluster);
             // if(auto_mode_) visualPointXYZI(cloud_cluster, 1, "cloud cluster after statistic filter");	
         }
@@ -391,16 +392,15 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
             plane_segmentation.setInputCloud (cloud_cluster);
             plane_segmentation.segment (*inliers, *coefficients);
 
-            // if (inliers->indices.size () == 0)
-            if (inliers->indices.size () < cluster_size_min_)
+            if (inliers->indices.size () == 0)
             {
-                if(DEBUG1) ROS_WARN("<<<<<< [Laser] Could not estimate a planar model for the given dataset.");
+                ROS_WARN("<<<<<< [Laser] Could not estimate a planar model for the given dataset.");
                 break;
             }
             seg_num++;
             Pseg_time_ = t_seg.toc();
             // Pseg_time_v.push_back(Pseg_time_);
-            if(DEBUG1) 
+            if(DEBUG2) 
             {
                 ROS_WARN("Segmentation No.%d\tspend[%fms]", seg_num, Pseg_time_);
                 // cout << "segmentation No." << seg_num << "\tspend [" << t_seg.toc() << "ms]" <<endl;
@@ -447,12 +447,12 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
             // check_time_v.push_back(check_time_);
             if(is_detected_calib)
             {
-                if(DEBUG1) ROS_WARN("<<<<<<<<<<<<< [LASER] Have found the calib borad point cloud!!!");
+                // ROS_WARN("<<<<<<<<<<<<< [LASER] Have found the calib borad point cloud!!!");
                 detectable = true;
                 pos_num ++;
                 Tr_calib2tpl_ = Tr_ukn2tpl_;
                 *detected_boards += *filtered_plane;
-                // if(DEBUG1) showPointXYZI(detected_boards,2, "positive boards");
+                // if(DEBUG) showPointXYZI(detected_boards,2, "positive boards");
                 pcl::copyPointCloud(*filtered_plane, *calib_board);
                 pcl::copyPointCloud(*boundary_registed, *calib_board_boundary_registed_);
                 pcl::copyPointCloud(*boundary, *calib_board_boundary_);
@@ -461,7 +461,7 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
             extract_plane.setNegative (true);     // extract_plane outliers
             extract_plane.filter(*cloud_f);
             cloud_cluster.swap(cloud_f);
-            if(DEBUG1) ROS_INFO("Remianing %d points in cloud", cloud_cluster->points.size());
+            if(DEBUG) ROS_INFO("Remianing %d points in cloud", cloud_cluster->points.size());
         }
     }    
     #ifdef STATIC_ANALYSE
@@ -507,7 +507,7 @@ bool AutoDetectLaser::detectCalibBoardRG(CloudType_::Ptr &cloud_in,
                 dis_z = maxP.z - minP.z;
         double volumn = dis_x * dis_y *dis_z;
         int block_num = ceill(volumn / 3000);
-        if(DEBUG1)
+        if(DEBUG)
         {   
             cout << "x_min = " << minP.x << "\tx_max = " << maxP.x << endl;
             cout << "source cloud volumn = " << volumn << "\tblock_num = " << block_num << endl;
@@ -539,7 +539,7 @@ bool AutoDetectLaser::detectCalibBoardRG(CloudType_::Ptr &cloud_in,
 
             *cloud2 += *block_filtered;
         }
-        if(DEBUG1) 
+        if(DEBUG) 
             cout << "PointCloud size after filter: " << cloud2->points.size() << endl;
     }
     else
@@ -608,7 +608,7 @@ bool AutoDetectLaser::detectCalibBoardRG(CloudType_::Ptr &cloud_in,
         extract_plane.setNegative (false);    //extract_plane inliers
         extract_plane.filter (*plane_cloud);
 
-        if(DEBUG1) ROS_WARN("PointCloud represneting the Cluster: %d data points.", plane_cloud->points.size());
+        if(DEBUG) ROS_WARN("PointCloud represneting the Cluster: %d data points.", plane_cloud->points.size());
         // if(auto_mode_) showPointXYZI(cloud_cluster, 1, "cloud cluster");
 
         // ******************* voxel2 to uniform pcl ******************
@@ -631,7 +631,7 @@ bool AutoDetectLaser::detectCalibBoardRG(CloudType_::Ptr &cloud_in,
             sor.setMeanK(sor_MeanK_);
             sor.setStddevMulThresh(sor_StddevMulThresh_);
             sor.filter(*cloud_s_filtered);
-            if(DEBUG1) cout << "cluster size after statistic filter = " << cloud_s_filtered->points.size() << endl;
+            if(DEBUG) cout << "cluster size after statistic filter = " << cloud_s_filtered->points.size() << endl;
             pcl::copyPointCloud(*cloud_s_filtered, *plane_cloud);
             // if(auto_mode_) visualPointXYZI(cloud_cluster, 1, "cloud cluster after statistic filter");	
         }
@@ -663,18 +663,18 @@ bool AutoDetectLaser::detectCalibBoardRG(CloudType_::Ptr &cloud_in,
         // check_time_v.push_back(check_time_);
         if(is_detected_calib)
         {
-            if(DEBUG1) ROS_WARN("<<<<<<<<<<<<< [LASER] Have found the calib borad point cloud!!!");
+            // ROS_WARN("<<<<<<<<<<<<< [LASER] Have found the calib borad point cloud!!!");
             detectable = true;
             pos_num ++;
             Tr_calib2tpl_ = Tr_ukn2tpl_;
             *detected_boards += *filtered_plane;
-            // if(DEBUG1) showPointXYZI(detected_boards,2, "positive boards");
+            // if(DEBUG) showPointXYZI(detected_boards,2, "positive boards");
             pcl::copyPointCloud(*filtered_plane, *calib_board);
             pcl::copyPointCloud(*boundary_registed, *calib_board_boundary_registed_);
             pcl::copyPointCloud(*boundary, *calib_board_boundary_);
         }
 
-        // if(DEBUG1) ROS_INFO("Remianing %d points in cloud", cloud_cluster->points.size());
+        // if(DEBUG) ROS_INFO("Remianing %d points in cloud", cloud_cluster->points.size());
     }
     // if(!detectable)
     //     ROS_WARN("<<<<<<<<<<<<< [LASER] CANNOT find the calib borad!");
@@ -715,7 +715,7 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
 {
     if(cloud->points.size() == 0)
     {
-        if(DEBUG1) cerr<< "[isCalibBoard] cloud_in is empty!" << endl;
+        if(DEBUG) cerr<< "[isCalibBoard] cloud_in is empty!" << endl;
         return false;
     }
     rmse_ukn2tpl_ = rmse_tpl2ukn_ = icp_score_ = -1.0;
@@ -727,7 +727,7 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
     //     sor.setInputCloud(cloud);
     //     sor.setLeafSize(0.01f, 0.01f, 0.01f);
     //     sor.filter(*cloud_filtered);
-    //     if(DEBUG1) cout << "PointCloud size after filter: " << cloud_filtered->points.size() << endl;
+    //     if(DEBUG) cout << "PointCloud size after filter: " << cloud_filtered->points.size() << endl;
     //     pcl::copyPointCloud(*cloud_filtered, *cloud);
     // }
         
@@ -739,7 +739,7 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
     // PCA_Transform = PCARegistration(cloud_to_test, calib_template_);
     PCA_Transform = PCARegistration(cloud, calib_template_);
     if(DEBUG2) cout << "the PCA computation spend [ " << time.toc() << "ms ]" << endl;
-    if(DEBUG2) cout << "transform matrix = \n" << PCA_Transform << endl;
+    if(DEBUG) cout << "transform matrix = \n" << PCA_Transform << endl;
 
     CloudType_::Ptr PCARegisted(new CloudType_);
     // pcl::transformPointCloud(*cloud_to_test, *PCARegisted, PCA_Transform);
@@ -763,10 +763,10 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
     {
         if(p->boundary_point > 0)   PCARegisted_boundary->push_back(PCARegisted->points[p-boundaries->begin()]);
     }
-    if(DEBUG1) cout << "size of boudary: " << PCARegisted_boundary->points.size() << endl;
+    if(DEBUG) cout << "size of boudary: " << PCARegisted_boundary->points.size() << endl;
     if(PCARegisted_boundary->points.size() <= 3)
     {
-        if(DEBUG1) ROS_WARN("This plane is invalid");
+        if(DEBUG) ROS_WARN("This plane is invalid");
         return false;
     }
     // pcl::transformPointCloud(*PCARegisted_boundary, *cloud_boundary_registed, PCA_Transform.inverse());
@@ -788,20 +788,20 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
     icp.align(*icp_cloud);
     if (icp.hasConverged()) 
     {
-        if(DEBUG1) ROS_INFO("ICP has converged!");
+        if(DEBUG2) ROS_INFO("ICP has converged!");
         icp_score_ = icp.getFitnessScore();
-        if(DEBUG1) cout << "\nICP has converged, score is " << icp_score_ << endl;
+        if(DEBUG2) cout << "\nICP has converged, score is " << icp_score_ << endl;
         
         Tr_ukn2tpl_ = icp.getFinalTransformation() * PCA_Transform;
         
     }
     else 
     {
-        if(DEBUG1)ROS_WARN("ICP hasn't converged!");
+        if(DEBUG2)ROS_WARN("ICP hasn't converged!");
         icp_score_ = -1.0;
     }
     if(DEBUG2) cout << "Applied " << 100 << " ICP iterations in [ " << time2.toc() << " ms ]" << endl;
-    if(DEBUG2)   
+    if(DEBUG)   
     {
         cout << "ICP Transformation: \n" << icp.getFinalTransformation() << endl;
         cout << "The final TR =\n" << Tr_ukn2tpl_ << endl;
@@ -811,7 +811,7 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
     
 
     // ************************* difference assesment *************************
-    if(DEBUG2)
+    if(DEBUG)
     {
         cout << "size of icp_cloud: " << icp_cloud->points.size() << endl;
         cout << "size of template: " << calib_template_->points.size() << endl; 
@@ -822,7 +822,7 @@ bool AutoDetectLaser::isCalibBoard(CloudType_::Ptr& cloud,
     rmse_ukn2tpl_ = rmse_ukn2tpl;
     rmse_tpl2ukn_ = rmse_tpl2ukn;
     rmse_mean = (rmse_ukn2tpl + rmse_tpl2ukn) / (float)2;
-    if(DEBUG1)
+    if(DEBUG3)
     {
         ROS_INFO("The rmse of unknown cloud to template cloud is: %f", rmse_ukn2tpl);
         ROS_INFO("The rmse of template cloud to unknown cloud is: %f", rmse_tpl2ukn);
@@ -860,7 +860,7 @@ Eigen::Matrix4f AutoDetectLaser::PCARegistration(CloudType_::Ptr& source_cloud, 
     ComputeEigenVectorPCA(source_cloud, C_source, U_source, lamda_source);
     ComputeEigenVectorPCA(target_cloud, C_target, U_target, lamda_target);
 
-    if(DEBUG2)
+    if(DEBUG)
     {   
         ROS_INFO("PCA computing finished!");
 
@@ -899,7 +899,7 @@ float AutoDetectLaser::CalculateRMSE(std::vector<float> data)
         sum += p;
     }
     mean = sum / (float)N;
-    if(DEBUG1) cout << "the mean is " << mean << endl;
+    if(DEBUG) cout << "the mean is " << mean << endl;
 
     sum = 0;
     for(auto p:data)
@@ -925,11 +925,11 @@ float AutoDetectLaser::ComputeDifference(CloudType_::Ptr& source, CloudType_::Pt
 
         if(kdtree.nearestKSearch(searchPoint, 1, pointIdxKNNSearch, pointKNNSquareDistance))
         {
-            // if(DEBUG1)   cout << p - source->begin() << ". " << "for point: " << searchPoint.x << " " << searchPoint.y << " " << searchPoint.z << endl;
+            // if(DEBUG)   cout << p - source->begin() << ". " << "for point: " << searchPoint.x << " " << searchPoint.y << " " << searchPoint.z << endl;
             for(auto i = pointIdxKNNSearch.begin(); i < pointIdxKNNSearch.end(); i++)
             {
                 float dist = sqrt(pointKNNSquareDistance[i-pointIdxKNNSearch.begin()]);
-                // if(DEBUG1)
+                // if(DEBUG)
                 // {
                 //     cout << "\t" << (*target)[*i].x << " " << (*target)[*i].y << " " << (*target)[*i].z
                 //     << "\tdistance: " << dist << endl; 
@@ -938,7 +938,7 @@ float AutoDetectLaser::ComputeDifference(CloudType_::Ptr& source, CloudType_::Pt
             }   
         }
     }
-    if(DEBUG2) cout << "distance vector size = " << distance.size() << endl;
+    if(DEBUG) cout << "distance vector size = " << distance.size() << endl;
     float rmse = CalculateRMSE(distance);
     
     return rmse;
@@ -953,7 +953,7 @@ void AutoDetectLaser::RemoveFloor(CloudType_::Ptr& cloud_in, CloudType_::Ptr& cl
     PointType_ max;
     pcl::getMinMax3D(*cloud_in, min, max);
 
-    if(DEBUG1)   cout << "min_z = " << min.z << "\t max_z = " << max.z << endl;
+    if(DEBUG)   cout << "min_z = " << min.z << "\t max_z = " << max.z << endl;
 
     double passthrough_z_min = min.z + (double)part * (max.z - min.z);
     double passthrough_z_max = max.z + (double)part * (max.z - min.z);
@@ -977,7 +977,7 @@ CloudType_::Ptr AutoDetectLaser::IntensityFilter(CloudType_::Ptr& cloud_in, floa
     // }
     // sort(v_intensity.begin(), v_intensity.end());   // 从小到大
     // float max_i = *(v_intensity.end()-1), min_i = *v_intensity.begin();
-    // if(DEBUG1)
+    // if(DEBUG)
     // {
     //     cout << "the size of v_intensity: " << v_intensity.size() << endl;
     //     cout << "the max intensity: " << max_i << "\t the min intensity: " << min_i << endl;
@@ -993,7 +993,7 @@ CloudType_::Ptr AutoDetectLaser::IntensityFilter(CloudType_::Ptr& cloud_in, floa
     pass.setNegative(true);
     pass.setInputCloud(cloud_in);
     pass.filter(*filtered_cloud);
-    if(DEBUG1)
+    if(DEBUG)
     {
         cout << "min_to_rm: " << min_to_rm << "\t" << "max_to_rm: " << max_to_rm << endl;
         cout << "size after intensity filter: " << filtered_cloud->size() << endl;

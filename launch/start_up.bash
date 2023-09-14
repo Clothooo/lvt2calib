@@ -1,8 +1,8 @@
 #!/bin/bash
 find_ws=$(pwd)/../../..
 
-lidar_types_rs=("velo_16" "velo_32" "velo_128" "os1_32" "os1_64" "os1_128")
-lidar_types_nrs=("livox_horizon" "livox_mid70" "livox_mid40" "livox_avia" "rs_m1")
+lidar_types_rs=("velo_16" "velo_32" "velo_128" "os_32" "os_64" "os_128")
+lidar_types_nrs=("livox_horizon" "livox_mid70" "livox_mid40" "livox_avia")
 camera_types=("rgb" "thermal")
 suite_types=("ll" "lc")
 
@@ -15,7 +15,7 @@ suite_type_code=-1
 # tp1="/livox/lidar"
 # ns1="livox_mid70"
 # tp2="/ouster/points"
-# ns2="os1_32"
+# ns2="os_32"
 
 # tp1="/livox/lidar"
 # ns1="livox_horizon"

@@ -107,9 +107,11 @@ void callback(const PointCloud2::ConstPtr& laser_cloud)
 
     Velodyne::addRange(*cloud_in);
     // Velodyne::normalizeIntensity(*cloud_in, 0, 255);
-    pcl::copyPointCloud(*cloud_in, *cloud_in_copy);
+    for(auto it = cloud_in->points.begin(); it < cloud_in->points.end(); it++)
+        it->intensity  = 0;
     publishPC<PointType>(cloud_in_pub, cloud_header, cloud_in);
 
+    pcl::copyPointCloud(*cloud_in, *cloud_in_copy);
     Velodyne::resetIntensity(*cloud_in);
     pcl::copyPointCloud(*cloud_in, *cloud_reload);
 
