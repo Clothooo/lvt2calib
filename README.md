@@ -1,10 +1,6 @@
-# LVT2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera
+# (IV 2023) LVT2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera
 
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2_sensor_trans_fig.png" style="zoom:80%;" />
-
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/qualification_theraml_livox.png" style="zoom:80%;" />
-
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/qualification_ouster_livox.png" style="zoom: 80%;" />
+<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_overview.png" style="zoom: 20%;" />
 
 ## Introduction
 
@@ -44,25 +40,13 @@ catkin_make
 source devel/setup.bash
 ```
 
-#### 2.2 Program node brief
+Download the calibraiton rosbags from Onedrive [rosbag_lvt2calib](https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj):
+```
+https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj
+```
+<img src="https://github.com/Clothooo/lvt2calib/assets/16817603/aa487b80-9d5d-43b0-9594-d08cae147581" alt="image" style="zoom:80%;" />
 
-This project includes the following nodes:
-
-- `cam_pattern`: automatic detection of the calibration target and extraction of four-circular features in images (for **visual** and **thermal camera**)
-- `livox_pattern`: automatic detection of the calibration target and extraction of four-circular features in Livox LiDAR point clouds (generalized to other **non-repetitive scanning 3D LiDAR**)
-- `velodyne_pattern`: automatic detection of the calibration target in Velodyne LiDAR (**repetitive scanning 3D LiDAR**) point clouds
-- `velodyne_parttern_circle`: extraction of four-circular features in Velodyne LiDAR point clouds.
-- `ouster_pattern` & `ouster_pattern_circle`: similar to `velodyne_pattern` and `velodyne_pattern_circle`, designed for Ouster LiDAR (**repetitive scanning 3D LiDAR**)
-- `pattern_collection_lc` & `pattern_collection_ll`:  accumulation and collection of features extracted from LiDAR point clouds and camera images (lc), or from two different LiDAR's point clouds(ll)
-- `extrinsic_calib_l2c` & `extrinsic_calib_l2l`: calculation of the extrinsic parameters of LiDAR-Camera suite (l2c) or LiDAR-LiDAR suite (l2l)
-
-Some auxiliary node:
-
-- `point_cloud_accumulation`: point cloud integration
-- `point_image_project_rebuild:`to re-projection point cloud on images and rebuild the colored point cloud
-- `point_cloud_fusion` : to fuse point clouds from multiple LiDARs
-
-#### 2.3 Preparing the calibration board
+#### 2.2 Preparing the calibration board
 
 <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/fed39af76a181cf84207adeda7cf71b.jpg" style="zoom: 50%;" />
 
@@ -90,157 +74,117 @@ The camera parameter should be saved as `xxx.txt` in folder `(lvt2calib path)/da
 
 #### 3.1 Quick Start
 
-run
+Run
 
 ```shell
 roscd lvt2calib/launch/
 bash start_up.bash
 ```
 
-When there is a camera in the suite that needs to be calibrated:
+1. LiDAR-Camera Calibration:
 
-- if the calibration board use is **dark** (default as white), please run
+   - If the calibration board use is **dark** (default as white), please run
 
-  ```shell
-  bash start_up.bash --darkBoard
-  ```
+     ```shell
+     bash start_up.bash --darkBoard
+     ```
 
-- if the **compressed** image topic is used, please run
+   - If the **compressed** image topic is used, please run
 
-  ```shell
-  bash start_up.bash --compressedImg
-  ```
+     ```shell
+     bash start_up.bash --compressedImg
+     ```
 
-Of course, these two parameters can be used at the same time (no order is required), like:
+   - Of course, these two parameters can be used at the same time (no order is required), like:
 
-```shell
-bash start_up.bash --compressedImg --darkBoard
-```
+     ```shell
+     bash start_up.bash --compressedImg --darkBoard
+     ```
 
-The terminal feedback:
+   The terminal feedback:
 
-![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_feedback.png)
+   ![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_feedback.png)
 
-According to the prompts, enter topic and namespace of the two sensors. <u>Noted: Each sensor corresponds to a specific namespace, please refer to the table in *Appendix* for details.</u> Take the Livox Horizon and RGB camera as an example:
+   According to the prompts, enter topic and namespace of the two sensors. <u>Noted: Each sensor corresponds to a specific namespace, please refer to the table in *Appendix* for details.</u> Take the *Livox Horizon* and *RGB camera* as an example:
 
-![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_input_enter.png)
+   ![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_input_enter.png)
 
-The type of sensor used is then displayed in the terminal. If it is judged to be a LiDAR-Camera suite, it will continue to prompt for the full path of the camera parameter file (setted in *Step 3.0*).
+   The type of sensor used is then displayed in the terminal. If it is judged to be a LiDAR-Camera suite, it will continue to prompt for <u>the full path of the camera parameter file (set in *Step 3.0*)</u>.
 
-![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_judge_cam_file.png)
+   ![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_judge_cam_file.png)
 
-Three new terminal windows will pop up, corresponding to *Step 3.2, 3.3 and 3.4*, and The current terminal will enter the process of *Step 3.5*. Please refer to these sections for details.
+2. LiDAR-LiDAR Calibration:
 
-**Noted**: If <u>two sensors of the same type</u> are used, that is, the input namespace are the same, for example, two Livox Horizon LiDARs (livox_horizon), the program will automatically determine the the namespaces are the same, and <u>add suffixes</u> `_1`and `_2` respectively. This may affect users viewing feature extraction results in *Rviz*, requiring manual changed to the observed topic.
+   Using Livox Mid-70 and Ouster OS1-32 suite as an example, the terminal feedback should be:
 
-------
+   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/LLCalib_startup_terminal_1.png" style="zoom:50%;" />
+   
+   **Noted**: If <u>two sensors of the same type</u> are used, that is, the input namespace are the same, for example, two Livox Horizon LiDARs (livox_horizon), just use the same namespace `livox_horizon`. The program will automatically determine, and <u>add suffixes</u> `_1`and `_2` respectively. This may affect users viewing feature extraction results in *Rviz*, requiring manual changed to the observed topic.
 
-(If using quick start, you can skip the following commands.)
+Name the current terminal as T0. Upon entering the command and pressing 'Enter,' three new terminals will appear: T1, T2, and T3.
 
-#### 3.2 Feature Extraction of Camera
+<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_terminal_pop.png" alt="fig_lvt2calib_terminal_pop" style="zoom: 25%;" />
 
-- For the thermal camera, run
+- T0: At this point, it will enter the calibration process and pause, waiting for the completion of the feature collection process.
+- T1: Feature Collection Window. Provide feedback on the progress of feature collection from the two sensors and for interactive control.
+- T2 & T3: Pattern Detection Windows. Providing feedback on calibration board detection and feature extraction results from the two sensors, respectively.
 
-  ```shell
-  roslaunch lvt2calib thermal_cam_pattern.laucn cam_info_dir:=(path of the camera parameter file) image_tp:=(topic of image) (ns_:=xxx)
-  ```
+<u>Continue with the following steps....</u>
 
-- For the visual camera, run:
+#### 3.2 Feature Extraction
 
-  ```shell
-  roslaunch lvt2calib rgb_cam_pattern.laucn cam_info_dir:=(path of the camera parameter file) image_tp:=(topic of image) (ns_:=xxx)
-  ```
+***This step is crucial for accurate feature extraction and obtaining precise extrinsic parameters.**
 
-  If the calibration board use is **dark** (default as white), add `isDarkBoard:=true`. If the **compressed** image topic is used, add `ifCompressed:=true`. `ns_` is the node namespace, defined by users.
+1. For Camera
 
-The program will display the raw image, the undistorted image, the grayed image (visual camera scene) and the result image of circle-center-detection:
+   Three/Four image windows will pop up: the raw image, the undistorted image, the grayed image (only for rgb cameras) and the result image of circle-center-detection. **Please confirm the successful detection of the circle center features through the result image and terminal T2/T3.**
 
-![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_camera.png)
+   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_camera.png" alt="lvt2calib_circle_camera" style="zoom: 50%;" />
 
-**Tips**: If it dose not detect the feature point, please consider whether the calibration board is not heated enough (thermal camera scene), the calibration board is placed at an improper angle or other reasons.
+2. For LiDAR
 
-#### 3.3 Feature Extraction of LiDAR
+   Focus on the Rviz window. **Ensure you see the correct calibration board point cloud** on the topic `/(ns_lidar)/laser_pattern/calib_board_cloud`, as shown in the figures: the left one from `/livox_mid70/laser_pattern/calib_board_cloud` and the right one from `/os1_32/laser_patter/calib_board_cloud`. **Prompts will also appear in terminal T2/T3**.
 
-Run 
+   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_board_laser.png" style="zoom: 45%;" />
 
-```shell
-roslaunch lvt2calib (liadr_type)_pattern.launch cloud_in_tp:=(topic of point cloud) (ns_:=xxx)
-```
+***If any issues at this stage, like the camera not detection the four-hole pattern or the LiDAR not recongnizing the carlibtion board, please check the [HELP.md](./HELP.md) for solutions.**
 
-`lidar_type` is the type of LiDAR you use. Please refer to the table in *Appendix*.
+<u>Continue with the following steps....</u>
 
-The program will output the target board founded and four circle centers extracted (after the user starts the feature collection), if the automatic calibration board detection is successful. Results can be viewed in *Rviz*. The description of each topic can be referred in **topics_breif.txt** (TBC...). This picture takes a suite of a Livox Mid70 LiDAR and an Ouster OS1-32 as an example.
+#### 3.3 Feature Data Collection
 
-![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_laser.png)
+1. Focus on terminal T1. The program will ask if you are ready to collect feature data. **Simply type 'y'/'Y' and press 'Enter', and the feature collection will start**.
 
-You can use passthrough filter to reduce the point cloud size before this step (by setting `use_passthrough_preprocess:=true`), which will speed up this process.
+   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_t1_ready.png" style="zoom: 33%;" />
 
-**Tips**: It is recommended to check the topic `/(ns_)/laser_pattern/calib_board_cloud` to make sure the target board can be successfully detected as shown in the following picture, and then proceed to the subsequent operation.
+2. Point cloud of four-circle-centers detected by LiDAR will be shown in rviz (topic: `/(ns_lidar)/laser_pattern_circle/circle_center_cloud`)
 
-![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_board_laser.png)
+   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_laser.png" style="zoom: 45%;" />
 
-#### 3.4 Feature Data Collection
+3. 
 
-1. Run
+4. Once the predetermined number of features has been collected, the **T1 program will pause and ask if you wish to gather data for the next position**.
 
-   For LiDAR-LiDAR suite:
+   <img src="https://gitee.com/Clothooo/mypicgo/raw/master/mypicgo/2021-10-20%2019-56-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="2021-10-20 19-56-37屏幕截图" style="zoom: 80%;" />
 
-   ```shell
-   roslaunch lvt2calib pattern_collectoin.luanch l2l_calib:=true ns_s1:=aaa ns_s2:=bbb
-   ```
+   - If yes, **input 'y'/'Y' followed by 'Enter'. The program will return to the 'READY' interface in step 3.3.1**. You can then adjust the calibration board's position and proceed with a **new round of feature data collection from step 3.2**. (Our paper suggests 9 positions or more)
+   - If no, input 'n'/'N' followed by 'Enter' (Note: Please do not directly key *ctrl+c*). The feature detection and collection programs will end while the extrinsic parameter calculation starts (continue to step 3.4).
 
-   For LiDAR-Camera suite:
+​	***If the collection takes to long, refer to [HELP.md](./HELP.md) to adjust the preset accumulation frame number.**
 
-   ```shell
-   roslaunch lvt2calib pattern_collectoin.luanch l2c_calib:=true ns_s1:=aaa ns_s2:=bbb
-   ```
+#### 3.4 Extrinsic Parameter Calculation
 
-   Arguments reference:
+Come back to terminal T0 (running start_up.bash), you will see the extrinsic parameter calculation progress, including the number of feature positions used, the regressed extrinsic matrix, 2D re-projection error (only for camera-related calibration), and 3D matching error. The extrinsic parameters are saved in CSV files:
 
-   | sensor suite |             `ns1`              |             `ns2`              |
-   | :----------: | :----------------------------: | :----------------------------: |
-   | LiDAR-LiDAR  | LiDAR1 node namespace (as 3.3) | LiDAR2 node namespace (as 3.3) |
-   | LiDAR-Camera | LiDAR node namespace (as 3.3)  | Camera node namespace (as 3.2) |
-
-2. At the beginning, the program will ask you if it's ready to collect in the terminal. Following 3.2 and 3.3, if everything is ok, press 'y/Y' and 'ENTER' to start. This process will accumulate feature points extracted from sensors. 
-
-3. When the cumulative number of frames reaches the set value `max_acc_frame`, the process will pause and ask whether to proceed to the feature acquisition for the next position and angle of the calibration board![2021-10-20 19-56-37屏幕截图](https://gitee.com/Clothooo/mypicgo/raw/master/mypicgo/2021-10-20%2019-56-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png)
-
-   If yes, please change the position of the calibration board. Then type 'y/Y' and 'Enter' in the terminal for the next round of feature point extraction and collection. 
-
-   If no, type 'n/N' and 'Enter' to end all the above programs. (Note: Please do not directly use *ctrl+c*).
-
-4. If collection ends and quit this process, a file `feature_info_(ns_s1)_to_(ns_s2).csv` and its copy (with a time suffix) will be saved in `(lvt2calib path)/data/pattern_collection_result/`.
-
-#### 3.5 Extrinsic Parameter Calculation
-
-Run
-
-For LiDAR-LiDAR suite:
-
-```shell
-roslauch lvt2calib extrinsic_calib.launch l2l_calib:=true ns_s1:=aaa ns_s2:=bbb
-```
-
-For LiDAR-Camera suite:
-
-```shell
-roslauch lvt2calib extrinsic_calib.launch l2c_calib:=true ns_s1:=aaa ns_s2:=bbb cam_info_path:=(path of the camera parameter file)
-```
-
-**Noted**: the `ns_s1` and `ns_s2` must be the same as these in *Step 3.4*.
-
-This program will output the extrinsic parameters and error evaluation, and these will be saved in `(lvt2calib path)/data/calibration_result/` as following files:
-
-- For LiDAR-LiDAR suite:
-  - `(ns_s1)_to_(ns_s2)_exParam.csv`: the extrinsic parameters from Sensor1 to Sensor2;
+- LiDAR-LiDAR suite:
+  - `(ns_lidar1)_to_(ns_lidar2)_exParam.csv`: the extrinsic parameters from Sensor1 to Sensor2;
   - `L2L_CalibLog.csv`: the log file of each extrinsic parameter calculation result and errors
 
 
-- For LiDAR-Camera suite:
+- LiDAR-Camera suite:
 
-  - `(ns_s1)_to_(ns_s2)_exParam_min3d.csv`: the extrinsic parameters from Sensor1 (LiDAR) to Sensor2 (Camera) calculated by minimizing 3d matching error;
-  - `(ns_s1)_to_(ns_s2)_exParam_min2d.csv`: the extrinsic parameters from Sensor1 (LiDAR) to Sensor2 (Camera) calculated by minimizing 2d re-projection error;
+  - `(ns_lidar)_to_(ns_camera)_exParam_min3d.csv`: extrinsic parameters from LiDAR to Camera calculated by minimizing 3d matching error;
+  - `(ns_lidar)_to_(ns_camera)_exParam_min2d.csv`: extrinsic parameters from LiDAR to Camera calculated by minimizing 2d re-projection error;
 
   - `L2C_CalibLog.csv`: the log file of each extrinsic parameter calculation result and errors;
 
@@ -264,15 +208,16 @@ This program will output the extrinsic parameters and error evaluation, and thes
 |  2   |   Livox Mid 70   | NRL  |   livox_mid70    |   livox_mid70_pattern.launch    |
 |  3   |   Livox Mid 40   | NRL  |   livox_mid40    |   livox_mid40_pattern.launch    |
 |  4   |    Livox Avia    | NRL  |    livox_avia    |    livox_avia_pattern.launch    |
-|  5   | Velodyne VLP-16  | RL_S |     velo_16      |  livox_velo_16_pattern.launch   |
-|  6   | Velodyne VLP-32  | RL_S |     velo_32      |  livox_velo_32_pattern.launch   |
-|  7   | Velodyne VLP-64  | RL_D |     velo_64      |  livox_velo_64_pattern.launch   |
-|  8   | Velodyne VLP-128 | RL_D |     velo_128     |  livox_velo_128_pattern.launch  |
-|  9   |  Ouster OS1-32   | RL_D |      os_32       |      os_32_pattern.launch       |
-|  10  |  Ouster OS1-64   | RL_D |      os_64       |      os_64_pattern.launch       |
-|  11  |  Ouster OS1-128  | RL_D |      os_128      |      os_128_pattern.launch      |
-|  12  |    RGB Camera    |  VC  |       rgb        |     rgb_cam_pattern.launch      |
-|  13  |  Thermal Camera  |  TC  |     thermal      |   thermal_cam_pattern.launch    |
+|  5   |   Robosense M1   | NRL  |      rs_m1       |   robosense_m1_pattern.launch   |
+|  6   | Velodyne VLP-16  | RL_S |     velo_16      |  livox_velo_16_pattern.launch   |
+|  7   | Velodyne VLP-32  | RL_S |     velo_32      |  livox_velo_32_pattern.launch   |
+|  8   | Velodyne VLP-64  | RL_D |     velo_64      |  livox_velo_64_pattern.launch   |
+|  9   | Velodyne VLP-128 | RL_D |     velo_128     |  livox_velo_128_pattern.launch  |
+|  10  |  Ouster OS1-32   | RL_D |      os1_32      |      os1_32_pattern.launch      |
+|  11  |  Ouster OS1-64   | RL_D |      os1_64      |      os1_64_pattern.launch      |
+|  12  |  Ouster OS1-128  | RL_D |     os1_128      |     os1_128_pattern.launch      |
+|  13  |    RGB Camera    |  VC  |       rgb        |     rgb_cam_pattern.launch      |
+|  14  |  Thermal Camera  |  TC  |     thermal      |   thermal_cam_pattern.launch    |
 
 NRL: Non-repetitive Scanning LiDAR
 
@@ -294,7 +239,10 @@ TBC...
 
 [L2V2T2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera (ResearchGate)](https://www.researchgate.net/publication/371377845_L2V2T2Calib_Automatic_and_Unified_Extrinsic_Calibration_Toolbox_for_Different_3D_LiDAR_Visual_Camera_and_Thermal_Camera)
 
+
+
 ## Citation
+
 If you find this work useful for your research, please consider citing:
 ```
 @INPROCEEDINGS{ZhangLiu2023IV,

@@ -2,7 +2,7 @@
 #define AutoDetectLaser_H
 
 #define PCL_NO_RECOMPILE
-#define DEBUG1 1
+#define DEBUG1 0
 #define DEBUG2 0
 // #define STATIC_ANALYSE
 
