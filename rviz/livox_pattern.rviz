@@ -131,7 +131,7 @@ Visualization Manager:
       Size (Pixels): 5
       Size (m): 0.05000000074505806
       Style: Spheres
-      Topic: /livox/laser_pattern/four_center
+      Topic: /livox/laser_pattern_circle/circle_center_cloud
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

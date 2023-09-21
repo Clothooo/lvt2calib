@@ -405,6 +405,7 @@ void set_run_param()
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "livox_pattern");
+    ros::NodeHandle nh;
     ros::NodeHandle nh_("~");
     // ros::Rate loop_rate(1);
 
@@ -428,7 +429,7 @@ int main(int argc, char **argv)
     reload_cloud_pub = nh_.advertise<PointCloud2>("cloud_in", 1);
     plane_segments_pub = nh_.advertise<PointCloud2>("plane_segments", 1);
 	calib_board_pub = nh_.advertise<PointCloud2>("calib_board_cloud", 1);
-    four_center_pub = nh_.advertise<PointCloud2>("four_center", 1);
+    four_center_pub = nh.advertise<PointCloud2>(ns_str+"/laser_pattern_circle/circle_center_cloud", 1);
     acc_boards_pub = nh_.advertise<PointCloud2>("acc_boards", 1);
     acc_boards_bound_registed_pub = nh_.advertise<PointCloud2>("acc_boards_bound_registed", 1);
     acc_boards_filterd_pub = nh_.advertise<PointCloud2>("acc_boards_filtered", 1);
