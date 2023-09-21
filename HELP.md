@@ -29,6 +29,8 @@ The default number of collection frame in the code is 60 frames, which has been 
 bash start_up.bash --maxFrame 30
 ```
 
+(Note: Reducing this variable may affect calibration accuracy)
+
 
 
 ### NODE STRUCTURE
