@@ -15,6 +15,8 @@
   <arg name="ns_" default="livox"/>
   <arg name="cluster_tole" default="0.08"/>
   <arg name="i_filter_out_max" default="30"/>
+  <arg name="rmse_ukn2tpl_thre" default="0.04"/>
+  <arg name="rmse_tpl2ukn_thre" default="0.03"/>
 
   <group ns="$(arg ns_)">
     <group if="$(arg use_passthrough_preprocess)">
@@ -68,6 +70,8 @@
       <rosparam command="load" file="$(find lvt2calib)/config/lidar_pattern_param.yaml"/>
       <param name="cluster_tole" value="$(arg cluster_tole)"/>
       <param name="i_filter_out_max" value="$(arg i_filter_out_max)"/>
+      <param name="rmse_ukn2tpl_thre" value="$(arg rmse_ukn2tpl_thre)"/>
+      <param name="rmse_tpl2ukn_thre" value="$(arg rmse_tpl2ukn_thre)"/>
     </node>
 
     <!-- <node type="rviz" name="rviz_livox" pkg="rviz" args="-d $(find lvt2calib)/rviz/livox_pattern.rviz" /> -->
