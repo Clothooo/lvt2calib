@@ -18,7 +18,7 @@ Install the ROS  environment and install the SDK and driver of the LiDAR you use
 
 #### 1.2 Denpendency
 
-Tested with Ubuntu 20.04 64-bit.
+Tested with Ubuntu 20.04 64-bit. ([Another branch for Ubuntu 18.04/16.04](https://github.com/Clothooo/lvt2calib/tree/ros_melodic))
 
 - ROS noetic
 - PCL 1.10
