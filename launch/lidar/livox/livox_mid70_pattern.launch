@@ -14,5 +14,7 @@
         <arg name="ns_" value="$(arg ns_)"/>
         <arg name="use_passthrough_preprocess" value="$(arg use_passthrough_preprocess)"/>
         <arg name="cloud_tp" value="$(arg cloud_tp)/acc_cloud"/>
+        <arg name="rmse_ukn2tpl_thre" value="0.04"/>
+        <arg name="rmse_tpl2ukn_thre" value="0.03"/>
     </include>
 </launch>

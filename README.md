@@ -163,7 +163,9 @@ Name the current terminal as T0. Upon entering the command and pressing 'Enter,'
 
    <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_laser.png" style="zoom: 45%;" />
 
-3. 
+3. In terminal T1, real-time feedback on how many frames of feature data have been collected by each of the two sensors will be provided.
+
+   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2_t1_feedback_1.png" style="zoom: 33%;" />
 
 4. Once the predetermined number of features has been collected, the **T1 program will pause and ask if you wish to gather data for the next position**.
 
