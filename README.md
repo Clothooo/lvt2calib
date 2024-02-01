@@ -1,6 +1,8 @@
 # (IV 2023) LVT2Calib: Automatic and Unified Extrinsic Calibration Toolbox for Different 3D LiDAR, Visual Camera and Thermal Camera
 
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_overview.png" style="zoom: 20%;" />
+<img src="./fig/fig_lvt2calib_overview.png" alt="fig_lvt2calib_overview" style="zoom: 20%;" />
+
+
 
 ## Introduction
 
@@ -44,15 +46,15 @@ Download the calibraiton rosbags from Onedrive [rosbag_lvt2calib](https://entued
 ```
 https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj
 ```
-<img src="https://github.com/Clothooo/lvt2calib/assets/16817603/aa487b80-9d5d-43b0-9594-d08cae147581" alt="image" style="zoom:80%;" />
+<img src="./fig/fig_lvt2calib_demobag.png" alt="fig_lvt2calib_demobag" style="zoom: 80%;" />
 
 #### 2.2 Preparing the calibration board
 
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/fed39af76a181cf84207adeda7cf71b.jpg" style="zoom: 50%;" />
+<img src="./fig/fig_lvt2calib_calibboard.png" alt="fig_lvt2calib_calibboard" style="zoom: 50%;" />
 
 We use a four-circle plate which has the same size as the plate in our previous work[[1]](https://ieeexplore.ieee.org/document/8961462) (also inspired by Guindel's work[[2]](https://ieeexplore.ieee.org.remotexs.ntu.edu.sg/document/8317829)). It is made by acrylic. Then, the back of the board is attached with the same size heating silicone pad to facilitate thermal imaging.
 
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/ThermalVoxCalib%20-%20fig_board.png" alt="ThermalVoxCalib - fig_board" style="zoom:80%;" />
+<img src="./fig/fig_lvt2calib_calibboard_real.png" alt="fig_lvt2calib_calibboard_real" style="zoom:80%;" />
 
 In order to ensure a smooth and successful calibration, the following matters need to be noted:
 
@@ -70,7 +72,7 @@ In order to ensure a smooth and successful calibration, the following matters ne
 
 The camera parameter should be saved as `xxx.txt` in folder `(lvt2calib path)/data/camera_info`. The file should be in the format as:
 
-![2021-10-20 18-57-13屏幕截图](https://gitee.com/Clothooo/mypicgo/raw/master/mypicgo/2021-10-20%2018-57-13%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png)
+<img src="./fig/fig_lvt2calib_camintrinsic.png" alt="fig_lvt2calib_camintrinsic"  />
 
 #### 3.1 Quick Start
 
@@ -103,27 +105,27 @@ bash start_up.bash
 
    The terminal feedback:
 
-   ![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_feedback.png)
+   <img src="./fig/fig_lvt2calib_bashfeedback.png" alt="fig_lvt2calib_bashfeedback"  />
 
    According to the prompts, enter topic and namespace of the two sensors. <u>Noted: Each sensor corresponds to a specific namespace, please refer to the table in *Appendix* for details.</u> Take the *Livox Horizon* and *RGB camera* as an example:
 
-   ![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_input_enter.png)
+   <img src="./fig/fig_lvt2calib_bashinput.png" alt="fig_lvt2calib_bashinput"  />
 
    The type of sensor used is then displayed in the terminal. If it is judged to be a LiDAR-Camera suite, it will continue to prompt for <u>the full path of the camera parameter file (set in *Step 3.0*)</u>.
 
-   ![](https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/bash_judge_cam_file.png)
+   <img src="./fig/fig_lvt2calib_bashjudge.png" alt="fig_lvt2calib_bashjudge"  />
 
 2. LiDAR-LiDAR Calibration:
 
    Using Livox Mid-70 and Ouster OS1-32 suite as an example, the terminal feedback should be:
 
-   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/LLCalib_startup_terminal_1.png" style="zoom:50%;" />
+   <img src="./fig/fig_lvt2calib_LL_startup_t1.png" alt="fig_lvt2calib_LL_startup_t1" style="zoom:50%;" />
    
    **Noted**: If <u>two sensors of the same type</u> are used, that is, the input namespace are the same, for example, two Livox Horizon LiDARs (livox_horizon), just use the same namespace `livox_horizon`. The program will automatically determine, and <u>add suffixes</u> `_1`and `_2` respectively. This may affect users viewing feature extraction results in *Rviz*, requiring manual changed to the observed topic.
 
 Name the current terminal as T0. Upon entering the command and pressing 'Enter,' three new terminals will appear: T1, T2, and T3.
 
-<img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_terminal_pop.png" alt="fig_lvt2calib_terminal_pop" style="zoom: 25%;" />
+<img src="./fig/fig_lvt2calib_terminal_pop.png" alt="fig_lvt2calib_terminal_pop" style="zoom: 25%;" />
 
 - T0: At this point, it will enter the calibration process and pause, waiting for the completion of the feature collection process.
 - T1: Feature Collection Window. Provide feedback on the progress of feature collection from the two sensors and for interactive control.
@@ -139,13 +141,13 @@ Name the current terminal as T0. Upon entering the command and pressing 'Enter,'
 
    Three/Four image windows will pop up: the raw image, the undistorted image, the grayed image (only for rgb cameras) and the result image of circle-center-detection. **Please confirm the successful detection of the circle center features through the result image and terminal T2/T3.**
 
-   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_camera.png" alt="lvt2calib_circle_camera" style="zoom: 50%;" />
+   <img src="./fig/fig_lvt2calib_circle_cam.png" alt="fig_lvt2calib_circle_cam" style="zoom: 50%;" />
 
 2. For LiDAR
 
    Focus on the Rviz window. **Ensure you see the correct calibration board point cloud** on the topic `/(ns_lidar)/laser_pattern/calib_board_cloud`, as shown in the figures: the left one from `/livox_mid70/laser_pattern/calib_board_cloud` and the right one from `/os1_32/laser_patter/calib_board_cloud`. **Prompts will also appear in terminal T2/T3**.
 
-   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_board_laser.png" style="zoom: 45%;" />
+   <img src="./fig/fig_lvt2calib_board_laser.png" alt="fig_lvt2calib_board_laser" style="zoom:45%;" />
 
 ***If any issues at this stage, like the camera not detection the four-hole pattern or the LiDAR not recongnizing the carlibtion board, please check the [HELP.md](./HELP.md) for solutions.**
 
@@ -155,19 +157,19 @@ Name the current terminal as T0. Upon entering the command and pressing 'Enter,'
 
 1. Focus on terminal T1. The program will ask if you are ready to collect feature data. **Simply type 'y'/'Y' and press 'Enter', and the feature collection will start**.
 
-   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_t1_ready.png" style="zoom: 33%;" />
+   <img src="./fig/fig_lvt2calib_t1_ready.png" alt="fig_lvt2calib_t1_ready" style="zoom:33%;" />
 
 2. Point cloud of four-circle-centers detected by LiDAR will be shown in rviz (topic: `/(ns_lidar)/laser_pattern_circle/circle_center_cloud`)
 
-   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/img/lvt2calib_circle_laser.png" style="zoom: 45%;" />
+   <img src="./fig/fig_lvt2calib_circle_laser.png" alt="fig_lvt2calib_circle_laser" style="zoom:45%;" />
 
 3. In terminal T1, real-time feedback on how many frames of feature data have been collected by each of the two sensors will be provided.
 
-   <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2_t1_feedback_1.png" style="zoom: 33%;" />
+   <img src="./fig/fig_lvt2calib_t1_feedback_1.png" alt="fig_lvt2calib_t1_feedback_1" style="zoom: 33%;" />
 
 4. Once the predetermined number of features has been collected, the **T1 program will pause and ask if you wish to gather data for the next position**.
 
-   <img src="https://gitee.com/Clothooo/mypicgo/raw/master/mypicgo/2021-10-20%2019-56-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="2021-10-20 19-56-37屏幕截图" style="zoom: 80%;" />
+   <img src="/home/yiyao/01_project_ws/calib_ws/src/lvt2calib/fig/fig_lvt2calib_t1_feedback_2.png" alt="fig_lvt2calib_t1_feedback_2" style="zoom:80%;" />
 
    - If yes, **input 'y'/'Y' followed by 'Enter'. The program will return to the 'READY' interface in step 3.3.1**. You can then adjust the calibration board's position and proceed with a **new round of feature data collection from step 3.2**. (Our paper suggests 9 positions or more)
    - If no, input 'n'/'N' followed by 'Enter' (Note: Please do not directly key *ctrl+c*). The feature detection and collection programs will end while the extrinsic parameter calculation starts (continue to step 3.4).
@@ -233,7 +235,7 @@ TC: Thermal Camera
 
 #### II. Parameter Description for Nodes
 
-TBC...
+Please refer to [HELP.md](./HELP.md).
 
 #### III. Paper
 
