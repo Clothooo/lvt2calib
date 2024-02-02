@@ -169,7 +169,7 @@ Name the current terminal as T0. Upon entering the command and pressing 'Enter,'
 
 4. Once the predetermined number of features has been collected, the **T1 program will pause and ask if you wish to gather data for the next position**.
 
-   <img src="/home/yiyao/01_project_ws/calib_ws/src/lvt2calib/fig/fig_lvt2calib_t1_feedback_2.png" alt="fig_lvt2calib_t1_feedback_2" style="zoom:80%;" />
+   <img src="./fig/fig_lvt2calib_t1_feedback_2.png" alt="fig_lvt2calib_t1_feedback_2" style="zoom:80%;" />
 
    - If yes, **input 'y'/'Y' followed by 'Enter'. The program will return to the 'READY' interface in step 3.3.1**. You can then adjust the calibration board's position and proceed with a **new round of feature data collection from step 3.2**. (Our paper suggests 9 positions or more)
    - If no, input 'n'/'N' followed by 'Enter' (Note: Please do not directly key *ctrl+c*). The feature detection and collection programs will end while the extrinsic parameter calculation starts (continue to step 3.4).
