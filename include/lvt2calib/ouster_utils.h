@@ -78,7 +78,7 @@ namespace Ouster {
     uint16_t reflectivity;
     uint8_t ring;
     uint16_t ambient;
-    float range;
+    uint32_t range;
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   }EIGEN_ALIGN16;
 
