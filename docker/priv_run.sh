@@ -2,7 +2,7 @@
 # Need to expose host linux x11 server for GUI to be displayed on host (unsafe if on shared system. comment out and use xauth is needed)
 xhost +local:root
 
-cd ../..
+cd ..
 
 sudo docker run -it --network=host --privileged --name lvt2calib \
     -v ${PWD}:/home/catkin_ws/src/lvt2calib \
