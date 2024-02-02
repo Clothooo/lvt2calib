@@ -16,7 +16,9 @@ A four-circular-holes board is adopted for all sensors as the calibration board.
 
 #### 1.1 Install environment and driver
 
-Install the ROS  environment and install the SDK and driver of the LiDAR you use. You can skip this step if they are already installed.
+Install the ROS  environment and install the SDK and driver of the LiDAR you use. You can skip this step if they are already installed. 
+
+Update: using docker
 
 #### 1.2 Denpendency
 
@@ -48,6 +50,25 @@ https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBS
 ```
 <img src="./fig/fig_lvt2calib_demobag.png" alt="fig_lvt2calib_demobag" style="zoom: 80%;" />
 
+**Build using docker**
+
+- Build docker form Dockerfile.
+
+  ```shell
+  cd path_to_your_lvt2calib_ws
+  cd src/lvt2calib/docker
+  sudo bash build.sh
+  sudo bash priv_run.sh
+  ```
+
+- Or just pull our image from dockerhub.
+
+  ```shell
+  docker pull clothooo/lvt2calib:noetic
+  # or
+  sudo bash pull_run.sh
+  ```
+
 #### 2.2 Preparing the calibration board
 
 <img src="./fig/fig_lvt2calib_calibboard.png" alt="fig_lvt2calib_calibboard" style="zoom: 50%;" />
@@ -74,7 +95,7 @@ The camera parameter should be saved as `xxx.txt` in folder `(lvt2calib path)/da
 
 <img src="./fig/fig_lvt2calib_camintrinsic.png" alt="fig_lvt2calib_camintrinsic"  />
 
-#### 3.1 Quick Start
+#### 3.1 Quick Start (inavailable for docker, refer to full usage)
 
 Run
 
@@ -192,7 +213,39 @@ Come back to terminal T0 (running start_up.bash), you will see the extrinsic par
 
   - `L2C_CalibLog.csv`: the log file of each extrinsic parameter calculation result and errors;
 
+### Step4: Full Usage
 
+1. Feature extraction in LiDAR point cloud
+
+   ```shell
+   roslaunch lvt2calib (ns_lidar)_pattern.launch cloud_tp:=(your_lidar_tp) ns_:=(ns_lidar)
+   ```
+
+2. Feature extraction in camera image
+
+   ```
+   roslaunch lvt2calib (ns_camera)_pattern.launch image_tp:=(your_img_yp) ifCompressed:=(true or false) isDarkBoard:=(true or false) ns_:=(ns_camera) cam_info_dir:=(your_camera_param_filepath)
+   ```
+
+   The default value of 'cam_info_dir' is `$(find lvt2calib)/data/camera_info/intrinsic.txt`
+
+3. Feature collection
+
+   ```shell
+   # for lidar-lidar calibration
+   roslaunch lvt2calib pattern_collection_ll.luanch ns_l1:=(ns_lidar_1) ns_l2:=(ns_lidar_2)
+   # for lidar_camera calibration
+   roslaunch lvt2calib pattern_collection_lc.launch ns_l:=(ns_lidar) ns_c:=(ns_camera)
+   ```
+
+4. Extrinsic Parameter Calculation
+
+   ```shell
+   # for lidar-lidar calibration
+   roslaunch lvt2calib extrinsic_calib_ll.luanch ns_l1:=(ns_lidar_1) ns_l2:=(ns_lidar_2)
+   # for lidar_camera calibration
+   roslaunch lvt2calib extrinsic_calib_lc.launch ns_l:=(ns_lidar) ns_c:=(ns_camera)
+   ```
 
 ## Thanks
 

@@ -11,4 +11,4 @@ sudo docker run -it --network=host --privileged --name lvt2calib \
     -v $HOME/.ssh:$HOME/.ssh \
     -e DISPLAY=$DISPLAY \
     -e QT_X11_NO_MITSHM=1 \
-    lvt2calib:noetic
+    clothooo/lvt2calib:noetic
