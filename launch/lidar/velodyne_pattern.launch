@@ -58,6 +58,7 @@
       <remap from="~cloud_laser" to="$(arg cloud_tp)/y_filtered" if="$(arg use_passthrough_preprocess)"/>
       <remap from="~cloud_laser" to="$(arg cloud_tp)" unless="$(arg use_passthrough_preprocess)"/>
 
+      <param name="laser_ring_num" value="$(arg laser_ring_num)"/>
       <param name="model_path" type="string" value="$(find lvt2calib)/data/template_pcl/four_circle_boundary.pcd"/>
       
       <param name="is_gazebo" type="bool" value="false"/>

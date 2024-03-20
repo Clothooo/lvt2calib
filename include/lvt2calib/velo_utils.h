@@ -57,7 +57,6 @@ using namespace std;
 using namespace cv;
 // using namespace sensor_msgs;
 
-typedef Eigen::Matrix<double, 12, 1> Vector12d;
 enum FIX_LASER_TYPE { VELO_16 = 0, VELO_32, VELO_64, VELO_128 };
 
 
@@ -71,6 +70,7 @@ vector<int> rings_count_v = {
   RINGS_COUNT_VELO64,
   RINGS_COUNT_VELO128
 };
+FIX_LASER_TYPE laser_type = VELO_16;
 
 namespace Velodyne {
   struct Point
@@ -78,9 +78,20 @@ namespace Velodyne {
     PCL_ADD_POINT4D; // quad-word XYZ
     float intensity; ///< laser intensity reading
     uint16_t ring; ///< laser ring number
+    float time;
     float range;
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW // ensure proper alignment
   }EIGEN_ALIGN16;
+
+  // void addRings(pcl::PointCloud<Velodyne::Point> & pc)
+  // {
+  //   for (auto it = pc.points.begin(); it < pc.points.end(); it++)
+  //   {
+  //     float angle = RAD2DEG(atan(it->z / sqrt(it->x*it->x + it->y*it->y))) + 15;
+  //     uint index = round(angle / 2.0);
+  //     it->ring = index;
+  //   }
+  // }
 
   void addRange(pcl::PointCloud<Velodyne::Point> & pc){
     for (pcl::PointCloud<Point>::iterator pt = pc.points.begin(); pt < pc.points.end(); pt++)
@@ -102,7 +113,7 @@ namespace Velodyne {
 
   void resetIntensity(pcl::PointCloud<Velodyne::Point> & pc)
   {
-    vector<vector<Velodyne::Point*> > rings = Velodyne::getRings(pc);
+    vector<vector<Velodyne::Point*> > rings = Velodyne::getRings(pc, laser_type);
     for (vector<vector<Velodyne::Point*> >::iterator ring = rings.begin(); ring < rings.end(); ++ring){
       if (ring->empty()) continue;
 
@@ -135,9 +146,14 @@ namespace Velodyne {
   }
 }
 
-POINT_CLOUD_REGISTER_POINT_STRUCT(
-  Velodyne::Point, (float, x, x) (float, y, y) (float, z, z)
-  (float, intensity, intensity) (uint16_t, ring, ring) (float, range, range));
+POINT_CLOUD_REGISTER_POINT_STRUCT(Velodyne::Point, 
+                                  (float, x, x) 
+                                  (float, y, y)
+                                  (float, z, z)
+                                  (float, intensity, intensity)
+                                  (uint16_t, ring, ring) 
+                                  (float, time, time)
+                                  (float, range, range));
 
 // PCL_INSTANTIATE(PCLBase, Velodyne::Point);
 // PCL_INSTANTIATE(Convolution3D, Velodyne::Point);
@@ -145,6 +161,43 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(
 // PCL_INSTANTIATE(KdTree, Velodyne::Point);
 // PCL_INSTANTIATE(KdTreeFLANN, Velodyne::Point);
 // PCL_INSTANTIATE(RegionGrowing, Velodyne::Point);
+
+void findLaserType(int laser_ring_num)
+{
+  auto it = find(rings_count_v.begin(), rings_count_v.end(), laser_ring_num);
+  if(it != rings_count_v.end())
+  {
+    int idx = distance(rings_count_v.begin(), it);
+    switch (idx)
+    {
+    case 0:
+      laser_type = VELO_16;
+      cout << "laser_type: VELO_16" << endl;
+      break;
+    case 1:
+      laser_type = VELO_32;
+      cout << "laser_type: VELO_32" << endl;
+      break;
+    case 2:
+      laser_type = VELO_64;
+      cout << "laser_type: VELO_64" << endl;
+      break;
+    case 3:
+      laser_type = VELO_128;
+      cout << "laser_type: VELO_128" << endl;
+      break;
+
+    default:
+      break;
+    }
+  }
+  else
+  {
+    laser_type = VELO_16;
+  }
+  
+  return;
+}
 
 Eigen::Affine3f getRotationMatrix(Eigen::Vector3f source, Eigen::Vector3f target){
   Eigen::Vector3f rotation_vector = target.cross(source);

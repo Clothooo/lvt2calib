@@ -62,12 +62,13 @@ enum OUSTER_TYPE {OUSTER_32, OUSTER_64, OUSTER_128};
 
 static const int RINGS_COUNT_OUSTER32 = 32;
 static const int RINGS_COUNT_OUSTER64 = 64;
-static const int RINGS_COUNT_OUSTER128 = 32;
+static const int RINGS_COUNT_OUSTER128 = 128;
 vector<int> rings_count_v = {
   RINGS_COUNT_OUSTER32,
   RINGS_COUNT_OUSTER64,
   RINGS_COUNT_OUSTER128
 };
+OUSTER_TYPE laser_type = OUSTER_32;
 
 namespace Ouster {
   struct Point
@@ -102,7 +103,7 @@ namespace Ouster {
 
   void resetIntensity(pcl::PointCloud<Ouster::Point> & pc)
   {
-    vector<vector<Ouster::Point*> > rings = Ouster::getRings(pc);
+    vector<vector<Ouster::Point*> > rings = Ouster::getRings(pc, laser_type);
     for (vector<vector<Ouster::Point*> >::iterator ring = rings.begin(); ring < rings.end(); ++ring){
       if (ring->empty()) continue;
 
@@ -161,6 +162,39 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(Ouster::Point,
 // PCL_INSTANTIATE(KdTree, Ouster::Point);
 // PCL_INSTANTIATE(KdTreeFLANN, Ouster::Point);
 // PCL_INSTANTIATE(RegionGrowing, Ouster::Point);
+
+void findLaserType(int laser_ring_num)
+{
+  auto it = find(rings_count_v.begin(), rings_count_v.end(), laser_ring_num);
+  if(it != rings_count_v.end())
+  {
+    int idx = distance(rings_count_v.begin(), it);
+    switch (idx)
+    {
+    case 0:
+      laser_type = OUSTER_32;
+      cout << "laser_type: OUSTER_32" << endl;
+      break;
+    case 1:
+      laser_type = OUSTER_64;
+      cout << "laser_type: OUSTER_64" << endl;
+      break;
+    case 2:
+      laser_type = OUSTER_128;
+      cout << "laser_type: OUSTER_128" << endl;
+      break;
+
+    default:
+      break;
+    }
+  }
+  else
+  {
+    laser_type = OUSTER_32;
+  }
+  
+  return;
+}
 
 Eigen::Affine3f getRotationMatrix(Eigen::Vector3f source, Eigen::Vector3f target){
   Eigen::Vector3f rotation_vector = target.cross(source);

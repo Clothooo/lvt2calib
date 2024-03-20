@@ -63,7 +63,6 @@ using namespace pcl;
 
 typedef Ouster::Point PointType;
 typedef pcl::PointCloud<PointType> CloudType;
-OUSTER_TYPE laser_type = OUSTER_32;
 
 ros::Publisher cumulative_pub, centers_pub, circle_center_pub, centers_centroid_pub, pattern_pub, range_pub, edges_pub, pattern_plane_edges_pub, coeff_pub, aux_pub, auxpoint_pub, debug_pub, xy_cloud_pub, cloud_in_range_pub;
 int nFrames; // Used for resetting center computation
@@ -139,19 +138,22 @@ void callback(const PointCloud2::ConstPtr& laser_cloud, const PointCloud2::Const
   coefficients_v(3) = coefficients->values[3];
 
   // Get edges points by range
-  vector<vector<PointType*> > rings = Ouster::getRings(*velo_cloud_pc, laser_type);
-  for (vector<vector<PointType*> >::iterator ring = rings.begin(); ring < rings.end(); ++ring){
-    if (ring->empty()) continue;
+  // vector<vector<PointType*> > rings = Ouster::getRings(*velo_cloud_pc, laser_type);
+  // for (vector<vector<PointType*> >::iterator ring = rings.begin(); ring < rings.end(); ++ring){
+  //   if (ring->empty()) continue;
 
-    (*ring->begin())->intensity = 0;
-    (*(ring->end() - 1))->intensity = 0;
-    for (vector<PointType*>::iterator pt = ring->begin() + 1; pt < ring->end() - 1; pt++){
-      PointType *prev = *(pt - 1);
-      PointType *succ = *(pt + 1);
-      (*pt)->intensity = max( max( prev->range-(*pt)->range, succ->range-(*pt)->range), 0.f);
-    }
-  }
+  //   (*ring->begin())->intensity = 0;
+  //   (*(ring->end() - 1))->intensity = 0;
+  //   for (vector<PointType*>::iterator pt = ring->begin() + 1; pt < ring->end() - 1; pt++){
+  //     PointType *prev = *(pt - 1);
+  //     PointType *succ = *(pt + 1);
+  //     (*pt)->intensity = max( max( prev->range-(*pt)->range, succ->range-(*pt)->range), 0.f);
+  //   }
+  // }
 
+  vector<int> indices_f1, indices_f2;
+  pcl::removeNaNFromPointCloud(*velo_cloud_pc, *velo_cloud_pc, indices_f1);
+  pcl::removeNaNFromPointCloud(*calib_board_pc, *calib_board_pc, indices_f2);
   CloudType::Ptr edges_cloud(new CloudType);
   pcl::PointCloud<pcl::PointXYZ>::Ptr calib_board_pc_copy(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::copyPointCloud(*calib_board_pc, *calib_board_pc_copy);
@@ -549,6 +551,7 @@ int main(int argc, char **argv){
   nh_.param("min_centers_found", min_centers_found_, 4);
   nh_.param<std::string>("ns", ns_str, "laser");
   nh_.param("laser_ring_num", rings_count, 32);
+  findLaserType(rings_count);
 
   cloud_in_range_pub = nh_.advertise<PointCloud2>("cloud_in_range", 1);
   range_pub = nh_.advertise<PointCloud2> ("calib_cloud_in", 1);

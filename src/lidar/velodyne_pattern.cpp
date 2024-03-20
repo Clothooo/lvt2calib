@@ -46,7 +46,7 @@ using namespace Eigen;
 
 typedef Velodyne::Point PointType;
 typedef pcl::PointCloud<PointType> CloudType;
-FIX_LASER_TYPE laser_type = VELO_16;
+int laser_ring_num = 16;
 
 int queue_size_ = 1;
 bool pos_changed_ = false;
@@ -112,9 +112,9 @@ void callback(const PointCloud2::ConstPtr& laser_cloud)
 
     Velodyne::resetIntensity(*cloud_in);
     pcl::copyPointCloud(*cloud_in, *cloud_reload);
+    publishPC<PointType>(reload_cloud_pub, cloud_header, cloud_reload);
 
-
-    if(pos_changed_)
+    if (pos_changed_)
     {
         if(clouds_proc_ <= queue_size_)
             return;
@@ -146,7 +146,6 @@ void callback(const PointCloud2::ConstPtr& laser_cloud)
     {
         ROS_WARN("<<<<<< [%s] Have found the calib borad point cloud!!!", ns_str.c_str());
         publishPC<pcl::PointXYZI>(calib_board_pub, cloud_header, calib_board);   // topic: /velodyne_pattern/calib_board_cloud
-        publishPC<PointType>(reload_cloud_pub, cloud_header, cloud_reload);
     }
     else{
         ROS_WARN("<<<<<< [%s] CANNOT find the calib borad!", ns_str.c_str());
@@ -248,6 +247,9 @@ void param_callback(lvt2calib::LaserConfig &config, uint32_t level)
 
 void load_param(ros::NodeHandle& nh_)
 {
+    nh_.param("laser_ring_num", laser_ring_num, 16);
+    findLaserType(laser_ring_num);
+
     nh_.param<std::string>("model_path", model_path, "");
     nh_.param("is_gazebo", is_gazebo, false);
     nh_.param("use_vox_filter", use_vox_filter_, true);

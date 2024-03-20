@@ -29,6 +29,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+
 find_package(TinyXML REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(PCL REQUIRED)
@@ -249,6 +250,17 @@ add_dependencies(ouster_pattern_circle
   ${PROJECT_NAME}_gencfg
 )
 target_link_libraries(ouster_pattern_circle
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+)
+
+add_executable(robosense_pattern src/lidar/robosense_pattern.cpp)
+add_dependencies(robosense_pattern
+  ${catkin_EXPORTED_TARGETS}
+  lvt2calib_generate_messages_cpp
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(robosense_pattern
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
 )

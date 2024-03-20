@@ -46,6 +46,7 @@ using namespace Eigen;
 
 typedef Ouster::Point PointType;
 typedef pcl::PointCloud<PointType> CloudType;
+int laser_ring_num = 32;
 
 int queue_size_ = 1;
 bool pos_changed_ = false;
@@ -247,6 +248,9 @@ void param_callback(lvt2calib::LaserConfig &config, uint32_t level)
 
 void load_param(ros::NodeHandle& nh_)
 {
+    nh_.param("laser_ring_num", laser_ring_num, 16);
+    findLaserType(laser_ring_num);
+
     nh_.param<std::string>("model_path", model_path, "");
     nh_.param("is_gazebo", is_gazebo, false);
     nh_.param("use_vox_filter", use_vox_filter_, true);
