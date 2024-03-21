@@ -87,7 +87,6 @@ ros::Publisher reload_cloud_pub, calib_board_pub;
 ros::Publisher cloud_in_pub, colored_i_planes_pub, icp_regist_boundary_pub, template_pc_pub, raw_boundary_pub, colored_planes_pub;
 
 AutoDetectLaser myDetector(R_LIDAR);
-FourCircleCenters myFourCenters;
 
 void load_param(ros::NodeHandle& nh_);
 void set_run_param();
@@ -106,14 +105,14 @@ void callback(const PointCloud2::ConstPtr& laser_cloud)
     fromROSMsg(*laser_cloud, *cloud_in);
 
     Ouster::addRange(*cloud_in);
-    // Ouster::normalizeIntensity(*cloud_in, 0, 255);
-    Ouster::copyReflectivityToIntensity(*cloud_in);
+    Ouster::normalizeIntensity(*cloud_in, 0, 255);
+    // Ouster::copyReflectivityToIntensity(*cloud_in);
     pcl::copyPointCloud(*cloud_in, *cloud_in_copy);
     publishPC<PointType>(cloud_in_pub, cloud_header, cloud_in);
 
     Ouster::resetIntensity(*cloud_in);
     pcl::copyPointCloud(*cloud_in, *cloud_reload);
-
+    publishPC<PointType>(reload_cloud_pub, cloud_header, cloud_reload);
 
     if(pos_changed_)
     {
@@ -146,7 +145,6 @@ void callback(const PointCloud2::ConstPtr& laser_cloud)
     {
         ROS_WARN("<<<<<< [%s] Have found the calib borad point cloud!!!", ns_str.c_str());
         publishPC<pcl::PointXYZI>(calib_board_pub, cloud_header, calib_board);   // topic: /velodyne_pattern/calib_board_cloud
-        publishPC<PointType>(reload_cloud_pub, cloud_header, cloud_reload);
     }
     else{
         ROS_WARN("<<<<<< [%s] CANNOT find the calib borad!", ns_str.c_str());
@@ -230,8 +228,8 @@ void param_callback(lvt2calib::LaserConfig &config, uint32_t level)
     ROS_INFO("New centroid_dis_max_: %f ", centroid_dis_max_);
     ROS_INFO("New min_centers_found_: %d ", min_centers_found_);
     // the theoretical max size of the point cloud on the calirbation plane
-    max_size = (1.2 * 0.8 - 4 * M_PI * pow(circle_radius_, 2)) * 2.0 * Pseg_dis_thre_ / pow(voxel_grid_size_, 3);
-    // double max_size = (1.2 * 0.8 - 4 * M_PI * pow(circle_radius_, 2)) / (voxel_grid_size_ * voxel_grid_size_);
+    // max_size = (1.2 * 0.8 - 4 * M_PI * pow(circle_radius_, 2)) * 2.0 * Pseg_dis_thre_ / pow(voxel_grid_size_, 3);
+    max_size = 120 * 2 / 2 + (120 - 24 * 2) * 4 / 2;
     ROS_INFO("New max_size: %f ", max_size);
 
     gauss_k_sigma2_ = config.gauss_k_sigma2;
@@ -286,12 +284,6 @@ void set_run_param()
     myDetector.setBoundEstKSearch(re);
     myDetector.setNormEstKSearch(reforn);
     myDetector.setDiffRMSEThreshold(rmse_ukn2tpl_thre_, rmse_tpl2ukn_thre_);
-    
-    // ***************** set four_circle_centers param
-    myFourCenters.setCircleSegDistanceThreshold(circle_seg_thre_);
-    myFourCenters.setCircleRadius(circle_radius_);
-    myFourCenters.setCentroidDis(centroid_dis_min_, centroid_dis_max_);
-    myFourCenters.setMinNumCentersFound(min_centers_found_);
 }
 
 

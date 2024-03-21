@@ -355,6 +355,9 @@ bool AutoDetectLaser::detectCalibBoard(CloudType_::Ptr &cloud_in,
 
         if(DEBUG1) ROS_WARN("PointCloud represneting the Cluster: %d data points.", cloud_cluster->points.size());
         // if(auto_mode_) showPointXYZI(cloud_cluster, 1, "cloud cluster");
+        #ifdef STATIC_ANALYSE
+        showPointXYZI(cloud_cluster, 2, "cluster cloud");
+        #endif 
 
         // ------ voxel2 to uniform pcl ------
         if(use_vox_filter_)

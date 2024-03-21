@@ -17,6 +17,7 @@
 
   <arg name="cluster_tole" default="0.05"/>
   <arg name="cluster_size_min" default="0.01"/>
+  <arg name="cluster_size_max" default="5"/>
   <arg name="i_filter_out_max" default="30"/>
   <arg name="rmse_ukn2tpl_thre" default="0.04"/>
   <arg name="rmse_tpl2ukn_thre" default="0.04"/>
@@ -76,6 +77,7 @@
       <rosparam command="load" file="$(find lvt2calib)/config/lidar_pattern_param.yaml"/>
       <param name="cluster_tole" value="$(arg cluster_tole)"/>
       <param name="cluster_size_min" value="$(arg cluster_size_min)"/>
+      <param name="cluster_size_max" value="$(arg cluster_size_max)"/>
       <param name="i_filter_out_max" value="$(arg i_filter_out_max)"/>
       <param name="rmse_ukn2tpl_thre" value="$(arg rmse_ukn2tpl_thre)"/>
       <param name="rmse_tpl2ukn_thre" value="$(arg rmse_tpl2ukn_thre)"/>

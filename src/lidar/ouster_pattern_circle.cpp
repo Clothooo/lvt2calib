@@ -86,18 +86,17 @@ string ns_str;
 void callback(const PointCloud2::ConstPtr& laser_cloud, const PointCloud2::ConstPtr& calib_cloud)
 {
 
-  if(DEBUG) ROS_INFO("[%s] Processing cloud...", ns_str.c_str());
+  if(DEBUG) ROS_INFO("[%s/circle] Processing cloud...", ns_str.c_str());
 
-  CloudType::Ptr velo_cloud_pc (new CloudType),
-                                        calib_board_pc(new CloudType),
-                                        pattern_cloud(new CloudType);
+  CloudType::Ptr velo_cloud_pc (new CloudType), pattern_cloud(new CloudType);
+  pcl::PointCloud<pcl::PointXYZI>::Ptr calib_board_pc(new pcl::PointCloud<pcl::PointXYZI>);
 
   clouds_proc_++;
 
   fromROSMsg(*laser_cloud, *velo_cloud_pc);
   fromROSMsg(*calib_cloud, *calib_board_pc);
 
-  Ouster::addRange(*velo_cloud_pc); // For latter computation of edge detection
+  // Ouster::addRange(*velo_cloud_pc); // For latter computation of edge detection
 
   sensor_msgs::PointCloud2 range_ros;
   pcl::toROSMsg(*calib_board_pc, range_ros);
@@ -113,7 +112,7 @@ void callback(const PointCloud2::ConstPtr& laser_cloud, const PointCloud2::Const
   pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
 
-  pcl::SACSegmentation<PointType> plane_segmentation;
+  pcl::SACSegmentation<pcl::PointXYZI> plane_segmentation;
   plane_segmentation.setModelType (pcl::SACMODEL_PARALLEL_PLANE);
   plane_segmentation.setDistanceThreshold (0.01);
   plane_segmentation.setMethodType (pcl::SAC_RANSAC);
