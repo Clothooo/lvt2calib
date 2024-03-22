@@ -6,15 +6,15 @@
 
 ## Introduction
 
-This solution provides a automatic an unified method for extrinsic calibration between repetitive scanning and non-repetitive scanning 3D LiDAR, sparse and dense 3D LiDAR, visual  and thermal camera.
+This solution provides an automatic and unified method for extrinsic calibration between repetitive scanning and non-repetitive scanning 3D LiDAR, sparse and dense 3D LiDAR, visual and thermal camera.
 
-A four-circular-holes board is adopted for all sensors as the calibration board. The four circle canters can be detected by all sensors, thus are ideal common features. To unify the calibration process, we propose a automatic target detection method based on template matching. In addition, we provide two types of output, minimizing 2D re-projection error (Min2D) and minimizing 3D matching error (Min3D), for different users of LiDAR-Camera suite.
+A four-circular-holes board is adopted for all sensors as the calibration board. The four circle canters can be detected by all sensors, which are ideal common features. To unify the calibration process, we propose an automatic target detection method based on template matching. In addition, we provide two types of output, minimizing 2D re-projection error (Min2D) and minimizing 3D matching error (Min3D), for different users of LiDAR-Camera suite.
 
 ## How to use
 
 ### Note
 
-For usage on Robosense repetitive-scan LiDARs, please use [rs_to_velodyne](https://github.com/HViktorTsoi/rs_to_velodyne) to transfer Robosense-format Point Cloud to Velodyne-format Point Cloud as first. Then use the velodyne-related settings to do the calibration.
+For usage on Robosense repetitive-scan LiDARs, please use [rs_to_velodyne](https://github.com/HViktorTsoi/rs_to_velodyne) to transfer Robosense-format Point Cloud to Velodyne-format Point Cloud at first. Then use the velodyne-related settings to do the calibration.
 
 The specialized luanch for robosense serials is under development...
 
@@ -50,7 +50,7 @@ catkin_make
 source devel/setup.bash
 ```
 
-Download the calibraiton rosbags from Onedrive [rosbag_lvt2calib](https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj):
+Download the calibration rosbags from Onedrive [rosbag_lvt2calib](https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj):
 ```
 https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj
 ```
