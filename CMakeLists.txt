@@ -254,17 +254,6 @@ target_link_libraries(ouster_pattern_circle
   ${PCL_LIBRARIES}
 )
 
-add_executable(robosense_pattern src/lidar/robosense_pattern.cpp)
-add_dependencies(robosense_pattern
-  ${catkin_EXPORTED_TARGETS}
-  lvt2calib_generate_messages_cpp
-  ${PROJECT_NAME}_gencfg
-)
-target_link_libraries(robosense_pattern
-  ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
-)
-
 add_executable(cam_pattern src/camera/cam_pattern.cpp)
 add_dependencies(cam_pattern 
   ${catkin_EXPORTED_TARGETS}
