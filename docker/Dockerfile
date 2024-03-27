@@ -26,6 +26,9 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN apt update && apt install python3-osrf-pycommon python3-catkin-tools -y
 
+# =========> INSTALL gnome-terminal <=============
+RUN apt-get update && apt-get install -y gnome-terminal
+
 # =========> INSTALL ceres library <=============
 RUN apt-get update && apt-get install -y \
     libgflags-dev \
