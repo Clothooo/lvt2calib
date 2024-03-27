@@ -15,7 +15,7 @@ A four-circular-holes board is adopted for all sensors as the calibration board.
 
 ### Note
 
-For usage on Robosense repetitive-scan LiDARs, please use [rs_to_velodyne](https://github.com/HViktorTsoi/rs_to_velodyne) to transfer Robosense-format Point Cloud to Velodyne-format Point Cloud at first. Then use the velodyne-related settings to do the calibration.
+For usage on **Robosense repetitive-scan LiDARs**, please use [rs_to_velodyne](https://github.com/HViktorTsoi/rs_to_velodyne) to transfer Robosense-format Point Cloud to Velodyne-format Point Cloud at first. Then use the **velodyne-related settings** to do the calibration.
 
 The specialized luanch for robosense serials is under development...
 
@@ -75,6 +75,8 @@ https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBS
   # or
   sudo bash pull_run.sh
   ```
+
+Note: If you use this repo in docker, please **launch your roscore in your local server** at first.
 
 #### 2.2 Preparing the calibration board
 
