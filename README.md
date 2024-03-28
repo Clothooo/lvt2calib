@@ -175,6 +175,10 @@ Name the current terminal as T0. Upon entering the command and pressing 'Enter,'
 
 2. For LiDAR
 
+   Note: Pass-through filter can be used in ahead to reduce the operand of point cloud. But please **ensure the background wall of the calibration board is retained in the input point cloud**. Here is and example of input point cloud from OS1-32 LiDAR.
+
+   <img src="./fig/fig_lvt2calib_input_pc_example.png" alt="fig_lvt2calib_input_pc_example" style="zoom: 50%;" />
+
    Focus on the Rviz window. **Ensure you see the correct calibration board point cloud** on the topic `/(ns_lidar)/laser_pattern/calib_board_cloud`, as shown in the figures: the left one from `/livox_mid70/laser_pattern/calib_board_cloud` and the right one from `/os1_32/laser_patter/calib_board_cloud`. **Prompts will also appear in terminal T2/T3**.
 
    <img src="./fig/fig_lvt2calib_board_laser.png" alt="fig_lvt2calib_board_laser" style="zoom:45%;" />
