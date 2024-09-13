@@ -2,6 +2,8 @@
 
 <img src="https://raw.githubusercontent.com/Clothooo/mypicgo_win/main/lvt2calib/fig_lvt2calib_overview.png" style="zoom: 20%;" />
 
+**Notice**: This branch is not maintained. If needed, you can request in Issues.
+
 ## Introduction
 
 This solution provides a automatic an unified method for extrinsic calibration between repetitive scanning and non-repetitive scanning 3D LiDAR, sparse and dense 3D LiDAR, visual  and thermal camera.
