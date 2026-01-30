@@ -51,9 +51,9 @@ catkin_make
 source devel/setup.bash
 ```
 
-Download the calibration rosbags from Onedrive [rosbag_lvt2calib](https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj):
+Download the calibration rosbags from Google Drive [rosbag_lvt2calib](https://drive.google.com/drive/folders/1k0Fue5VDmeOH25XlLJb-VmaOQvbt5gNa?usp=sharing):
 ```
-https://entuedu-my.sharepoint.com/:f:/g/personal/jzhang061_e_ntu_edu_sg/ElG9hWBSDrRAjaftVeatWzcBDZI-JxeKb3jmu5lMEPfyGw?e=jZvjdj
+https://drive.google.com/drive/folders/1k0Fue5VDmeOH25XlLJb-VmaOQvbt5gNa?usp=sharing
 ```
 <img src="./fig/fig_lvt2calib_demobag.png" alt="fig_lvt2calib_demobag" style="zoom: 80%;" />
 
@@ -327,3 +327,4 @@ If you find this work useful for your research, please consider citing:
   pages={1-7},
   doi={10.1109/IV55152.2023.10186657}}
 ```
+
