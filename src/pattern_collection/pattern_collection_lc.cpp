@@ -559,7 +559,9 @@ int main(int argc, char **argv)
                                 acc_camera_cloud->clear();
 
                                 laser_sub.shutdown();
+                                stereo_sub.shutdown();
                                 laser_sub = nh_.subscribe<lvt2calib::ClusterCentroids>("cloud_laser", 10, laser_callback);
+                                stereo_sub = nh_.subscribe<lvt2calib::ClusterCentroids>("cloud_cam", 1, camera_callback);
 
                                 ros::param::set("/do_acc_boards", true);
                                 break;

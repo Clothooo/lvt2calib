@@ -31,8 +31,8 @@
         <remap from="~output" to="$(arg cloud_tp)/x_filtered" />
         <rosparam>
           filter_field_name: x
-          filter_limit_min: -0.1
-          filter_limit_max: 0.1
+          filter_limit_min: 1
+          filter_limit_max: 7
           <!-- filter_limit_negative: True -->
           filter_limit_negative: False
           max_queue_size: 1
@@ -45,8 +45,8 @@
         <remap from="~output" to="$(arg cloud_tp)/y_filtered" />
         <rosparam>
           filter_field_name: y
-          filter_limit_min: -0.1
-          filter_limit_max: 0.1
+          filter_limit_min: -4
+          filter_limit_max: 4
 
           filter_limit_negative: False
           <!-- filter_limit_negative: True -->

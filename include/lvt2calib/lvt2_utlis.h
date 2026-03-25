@@ -24,6 +24,7 @@
 #include <Eigen/Dense>
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/eigen.hpp>
+#include <opencv2/opencv.hpp>
 
 #ifdef TF2
 #include <tf2_ros/buffer.h>
@@ -43,6 +44,17 @@ using namespace std;
 using namespace cv;
 using namespace pcl;
 using namespace tf;
+
+void sortPatternCentersYZ(pcl::PointCloud<pcl::PointXYZ>::Ptr pc, std::vector<pcl::PointXYZ> &v);
+pcl::PointXYZ calculateClusterCentroid(std::vector<pcl::PointXYZ> one_acc_points);
+cv::Point2f calculateClusterCentroid2d(std::vector<cv::Point2f> one_acc_points);
+std::vector<double> calculateRMSE(std::vector<pcl::PointXYZ> ground_truth, std::vector<pcl::PointXYZ> detected);
+std::vector<double> calculateRMSE(std::vector<cv::Point2f> ground_truth, std::vector<cv::Point2f> detected);
+void sortPatternCentersUV(std::vector<cv::Point2f> p, std::vector<cv::Point2f> &v);
+std::vector<double> eigenMatrix2SixDOF(Eigen::Matrix4d transform_matrix);
+void projectVelo2Cam(pcl::PointCloud<pcl::PointXYZ>::Ptr& points_3d_in, cv::Mat cameraMatrix, cv::Mat Tr_velo_to_cam, std::vector<cv::Point2f> &projected_points);
+void convertPointCloudToCvVector(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, std::vector<cv::Point3f> &points);
+const std::string currentDateTime();
 
 void sortPatternCentersYZ(pcl::PointCloud<pcl::PointXYZ>::Ptr pc, std::vector<pcl::PointXYZ> &v){
   double avg_y = 0, avg_z = 0;
@@ -261,23 +273,9 @@ std::vector<double> eigenMatrix2SixDOF(Eigen::Matrix4d transform_matrix){
   return params_6dof;
 }
 
-void projectVelo2Cam(pcl::PointCloud<pcl::PointXYZ>::Ptr& point_3d_in, cv::Mat cameraMatrix, cv::Mat Tr_velo_to_cam, std::vector<cv::Point2f> &projected_points){
+void projectVelo2Cam(pcl::PointCloud<pcl::PointXYZ>::Ptr& points_3d_in, cv::Mat cameraMatrix, cv::Mat Tr_velo_to_cam, std::vector<cv::Point2f> &projected_points){
   // cameraMatrix: 3x3 matrix, camera intrinsic param
   // Tr_velo_to_cam: 4x4 matrix, extrinsic param from lidar to camera
-
-  // pcl::PointCloud<pcl::PointXYZ>::Ptr
-
-  // cv::Mat R,  T, size, cameraMatrix;
-  // // Calculate transformation from velo to cam
-  // transpose( R_c_to_v, R_v_to_c );
-  // T_v_to_c = -R_v_to_c * T_c_to_v;
-  // Tr_cam_to_velo = (Mat_<double>(4,4) <<
-  //     R_c_to_v.at<double>(0, 0), R_c_to_v.at<double>(0, 1), R_c_to_v.at<double>(0, 2), T_c_to_v.at<double>(0),
-  //     R_c_to_v.at<double>(1, 0), R_c_to_v.at<double>(1, 1), R_c_to_v.at<double>(1, 2), T_c_to_v.at<double>(1),
-  //     R_c_to_v.at<double>(2, 0), R_c_to_v.at<double>(2, 1), R_c_to_v.at<double>(2, 2), T_c_to_v.at<double>(2),
-  //     0, 0, 0, 1
-  // ); 
-  // Tr_velo_to_cam = Tr_cam_to_velo.inv();
 
   projected_points.clear();
   // camera matrix K (3x4)
@@ -292,7 +290,7 @@ void projectVelo2Cam(pcl::PointCloud<pcl::PointXYZ>::Ptr& point_3d_in, cv::Mat c
   cv::Mat P_velo_to_img;
   P_velo_to_img = K  * Tr_velo_to_cam; 
 
-  for(auto it=point_3d_in->points.begin(); it<point_3d_in->points.end(); it++){
+  for(auto it=points_3d_in->points.begin(); it<points_3d_in->points.end(); it++){
 
     // convert "objectPoints" to homogeneous "ptMat"
     // cv::Point3f pt = objectPoints[i];
@@ -320,6 +318,29 @@ void projectVelo2Cam(pcl::PointCloud<pcl::PointXYZ>::Ptr& point_3d_in, cv::Mat c
 
   } 
 
+}
+
+void projectLidar2Cam(pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, cv::Mat cameraMatrix, cv::Mat cameraDistcoeff, cv::Mat Tr_lidar_to_cam, std::vector<cv::Point2f> &projected_points)
+{
+  std::vector<cv::Point3f> points_3d;
+  convertPointCloudToCvVector(cloud, points_3d);
+  cv::Mat R = Tr_lidar_to_cam(cv::Range(0, 3), cv::Range(0, 3));
+  cv::Mat tvec = Tr_lidar_to_cam(cv::Range(0, 3), cv::Range(3, 4));
+  cv::Mat rvec;
+  cv::Rodrigues(R, rvec);
+  cv::projectPoints(points_3d, rvec, tvec, cameraMatrix, cameraDistcoeff, projected_points);
+}
+
+void convertPointCloudToCvVector(pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, std::vector<cv::Point3f>& points)
+{
+  points.reserve(cloud->points.size());
+  for (auto &pt : cloud->points)
+  {
+    if(!std::isnan(pt.x) && !std::isnan(pt.y) && !std::isnan(pt.z))
+    {
+      points.emplace_back(cv::Point3f(pt.x, pt.y, pt.z));
+    }
+  }
 }
 
 const std::string currentDateTime() {

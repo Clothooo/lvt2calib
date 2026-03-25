@@ -1,7 +1,7 @@
 <launch>
   
     <arg name="ns_" default="os1_32"/>
-    <arg name="use_passthrough_preprocess" default="false"/>
+    <arg name="use_passthrough_preprocess" default="true"/>
     <arg name="cloud_tp" default="/ouster/points"/>
 
     <include file="$(find lvt2calib)/launch/lidar/ouster_pattern.launch">
@@ -11,8 +11,8 @@
         <arg name="laser_ring_num" value="32"/>
         <arg name="cluster_tole" value="0.15"/>
         <arg name="cluster_size_min" value="0.8"/>
-        <arg name="cluster_size_max" value="3"/>
-        <arg name="i_filter_out_max" value="9"/>
+        <arg name="cluster_size_max" value="5"/>
+        <arg name="i_filter_out_max" value="18"/>
         <arg name="rmse_ukn2tpl_thre" value="0.04"/>
         <arg name="rmse_tpl2ukn_thre" value="0.04"/>
     </include>

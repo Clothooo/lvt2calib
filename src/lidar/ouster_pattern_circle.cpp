@@ -99,12 +99,12 @@ void callback(const PointCloud2::ConstPtr& laser_cloud, const PointCloud2::Const
   sensor_msgs::PointCloud2 range_ros;
   pcl::toROSMsg(*calib_board_pc, range_ros);
   range_ros.header = laser_cloud->header;
-  range_pub.publish(range_ros);  
+  range_pub.publish(range_ros);  // /ns/calib_cloud_in
 
   sensor_msgs::PointCloud2 cloud_in_range_ros;
   pcl::toROSMsg(*velo_cloud_pc, cloud_in_range_ros);
   cloud_in_range_ros.header = laser_cloud->header;
-  cloud_in_range_pub.publish(cloud_in_range_ros);   
+  cloud_in_range_pub.publish(cloud_in_range_ros);   // /ns/cloud_in_range
 
   // Plane segmentation
   pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
@@ -358,19 +358,26 @@ void callback(const PointCloud2::ConstPtr& laser_cloud, const PointCloud2::Const
     // Make sure there is no circle at the center of the pattern or far away from it
     double centroid_distance = sqrt(pow(fabs(edges_centroid.x-center.x),2) + pow(fabs(edges_centroid.y-center.y),2));
     ROS_DEBUG("Distance to centroid %f, should be in (%.2f, %.2f)", centroid_distance, centroid_distance_min_, centroid_distance_max_);
-    if (centroid_distance < centroid_distance_min_){
+    if (centroid_distance < centroid_distance_min_)
+    {
       valid = false;
       // ???
       for (pcl::PointCloud<pcl::PointXYZ>::iterator pt = circle_cloud->points.begin(); pt < circle_cloud->points.end(); ++pt){
         centroid_cloud_inliers.push_back(*pt);
       }
-    }else if(centroid_distance > centroid_distance_max_){
+    }
+    else if(centroid_distance > centroid_distance_max_)
+    {
       valid = false;
-    }else{
+    }
+    else
+    {
       ROS_DEBUG("Valid centroid");
-      for(std::vector<std::vector <float> >::iterator it = found_centers.begin(); it != found_centers.end(); ++it) {
+      for(std::vector<std::vector <float> >::iterator it = found_centers.begin(); it != found_centers.end(); ++it) 
+      {
         ROS_DEBUG("%f", sqrt(pow(fabs((*it)[0]-center.x),2) + pow(fabs((*it)[1]-center.y),2)));
-        if (sqrt(pow(fabs((*it)[0]-center.x),2) + pow(fabs((*it)[1]-center.y),2))<0.25){
+        if (sqrt(pow(fabs((*it)[0]-center.x),2) + pow(fabs((*it)[1]-center.y),2))<0.25)
+        {
           valid = false;
           break;
         }
