@@ -33,12 +33,12 @@ cv::Mat cameraMatrix_gazebo = (Mat_<double>(3,3) <<
           0.0, 0.0, 1.0
           );
 cv::Mat cameraMatrix = Mat_<double>(3,3);
+cv::Mat cam_distcoeff = cv::Mat::zeros(1, 5, CV_16FC1);
 
 bool save_calib_file = false, is_multi_exp = false;
 bool is_auto_mode = false;
 vector<pcl::PointXYZ> lv_3d_for_reproj;
-std::vector<cv::Point2f> lv_2d_projected, lv_2d_projected_min2d, lv_2d_projected_min3d,
-                        cam_2d_for_reproj;
+std::vector<cv::Point2f> lv_2d_projected, lv_2d_projected_min2d, lv_2d_projected_min3d, cam_2d_for_reproj;
 int sample_size = 0, sample_num = 0, sample_size_min = 0, sample_size_max = 0;
 ostringstream os_calibfile_log, os_extrinsic_min3d, os_extrinsic_min2d;
 
@@ -57,10 +57,26 @@ void ExtCalib(pcl::PointCloud<pcl::PointXYZ>::Ptr laser_cloud, pcl::PointCloud<p
     Eigen::Matrix4d Tr_l2s_centroid_min3d = mycalib.ExtCalib3D_ceres(laser_cloud, camera_cloud);
     // Get final transform from velo to camera (using centroid to do calibration)
     Eigen::Matrix4d Tr_s2c_centroid, Tr_l2c_centroid_min3d;
-    Tr_s2c_centroid <<   0, -1, 0, 0,
-    0, 0, -1, 0,
-    1, 0, 0, 0,
-    0, 0, 0, 1;
+    // Tr_s2c_centroid <<   0, -1, 0, 0,
+    // 0, 0, -1, 0,
+    // 1, 0, 0, 0,
+    // 0, 0, 0, 1;
+    tf::TransformListener listener;
+    tf::StampedTransform transform;
+    try{
+        ROS_DEBUG("[calib_l2c] listen for tf");
+        listener.waitForTransform("stereo_camera", "stereo", ros::Time(0), ros::Duration(1.0));
+        listener.lookupTransform("stereo_camera", "stereo", ros::Time(0), transform);
+    }catch (tf::TransformException& ex) {
+        ROS_WARN("[calib_l2c] TF exception:\n%s", ex.what());
+        return;
+    }
+    Eigen::Affine3d Tr_Aff_s2c;
+    tf::transformTFToEigen(transform, Tr_Aff_s2c);
+    Tr_s2c_centroid = Tr_Aff_s2c.matrix();
+    if(DEBUG)
+        cout << "Tr_s2c_centroid = " << Tr_s2c_centroid << endl;
+
     // The final transformation matrix from lidar to camera frame (stereo_camera).
     Tr_l2c_centroid_min3d = Tr_s2c_centroid * Tr_l2s_centroid_min3d;
     cout << "Tr_laser_to_cam_centroid_min_3d = " << "\n" << Tr_l2c_centroid_min3d << endl;
@@ -386,11 +402,15 @@ int main(int argc, char **argv)
     {
         std::ostringstream oss_CamIntrinsic;
         oss_CamIntrinsic << camera_info_dir_;
-        ParameterReader pr_cam_intrinsic(oss_CamIntrinsic.str()); // ParameterReader is a class defined in "slamBase.h"
-        cameraMatrix = pr_cam_intrinsic.ReadMatFromTxt(pr_cam_intrinsic.getData("K"),3,3);
+        // ParameterReader pr_cam_intrinsic(oss_CamIntrinsic.str()); // ParameterReader is a class defined in "slamBase.h"
+        // cameraMatrix = pr_cam_intrinsic.ReadMatFromTxt(pr_cam_intrinsic.getData("K"),3,3);
+
+        cv::FileStorage fs_reader(camera_info_dir_, cv::FileStorage::READ);
+        fs_reader["CameraMat"] >> cameraMatrix;
+        fs_reader["DistCoeff"] >> cam_distcoeff;
+        fs_reader.release();
+        cout << "cameraMatrix: \n" << cameraMatrix << endl;
         cv::cv2eigen(cameraMatrix, mycalib.cameraMatrix_);
-        cout << "cameraMatrix: \n"
-             << cameraMatrix << endl;
 
         fileHandle();
         // <<<<<<<<<<<<<<<<<< random sample to do the calirbation

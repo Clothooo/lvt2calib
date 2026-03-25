@@ -1,7 +1,7 @@
 <launch>
   <arg name="ifCompressed" default="false"/>
   <arg name="image_tp" default="/thermal_cam/thermal_image"/>
-  <arg name="cam_info_filename" default="intrinsic.txt"/>
+  <arg name="cam_info_filename" default="intrinsic.yaml"/>
   <arg name="isDarkBoard" default="false"/>
   <arg name="ns_" default="rgb"/>
 

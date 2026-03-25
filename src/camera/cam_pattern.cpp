@@ -59,10 +59,10 @@ bool is_rgb = false;
 bool use_darkboard = false;
 bool use_morph = false;
 
-string win_raw_img = "1.raw_image", win_undist_img = "2.undistorted_image", win_gray_img = "2.1 gray image", win_circle_img = "3.Draw circle centers on undistorted image"; 
+string win_raw_img = "1.raw_image", win_undist_img = "2.undistorted_image", win_rect_img = "2.rect_image", win_gray_img = "2.1 gray image", win_circle_img = "3.Draw circle centers on undistorted image"; 
 
-Mat A; 
-Mat D;
+cv::Mat A, D;
+cv::Mat map1, map2;
 
 void load_params()
 {
@@ -124,11 +124,23 @@ void load_params()
     if(ros::param::get("~camera_info_dir", camera_info_dir_))
     {
         ROS_INFO("Retrived param 'camera_info_dir_': %s", camera_info_dir_.c_str());
-        std::ostringstream oss_CamIntrinsic;
-        oss_CamIntrinsic << camera_info_dir_;
-        ParameterReader pr_cam_intrinsic(oss_CamIntrinsic.str()); // ParameterReader is a class defined in "slamBase.h"
-        A = pr_cam_intrinsic.ReadMatFromTxt(pr_cam_intrinsic.getData("K"),3,3);
-        D = pr_cam_intrinsic.ReadMatFromTxt(pr_cam_intrinsic.getData("D"),1,5);
+        // std::ostringstream oss_CamIntrinsic;
+        // oss_CamIntrinsic << camera_info_dir_;
+        // ParameterReader pr_cam_intrinsic(oss_CamIntrinsic.str()); // ParameterReader is a class defined in "slamBase.h"
+        // A = pr_cam_intrinsic.ReadMatFromTxt(pr_cam_intrinsic.getData("K"),3,3);
+        // D = pr_cam_intrinsic.ReadMatFromTxt(pr_cam_intrinsic.getData("D"),1,5);
+        cv::FileStorage fs_reader(camera_info_dir_, cv::FileStorage::READ);
+        cv::Mat cam_intrinsic, cam_distcoeff;
+        cv::Size img_size;
+        fs_reader["CameraMat"] >> cam_intrinsic;
+        fs_reader["DistCoeff"] >> cam_distcoeff;
+        fs_reader["ImageSize"] >> img_size;
+        fs_reader.release();
+
+        // A = cv::getOptimalNewCameraMatrix(cam_intrinsic, cam_distcoeff, img_size, 0, img_size);
+        A = cam_intrinsic.clone();
+        D = cam_distcoeff.clone();
+        cv::initUndistortRectifyMap(cam_intrinsic, cam_distcoeff, cv::Mat(), cam_intrinsic, img_size, CV_16SC2, map1, map2);
     }
 }
 
@@ -240,15 +252,19 @@ bool order_Y(const Vec2f &p1, const Vec2f &p2)
 void image_process(cv::Mat original_image, const sensor_msgs::ImageConstPtr& image_msg)
 {
     images_proc_++;
-    cv::Mat undistorted_image, gray;
-    cv::undistort(original_image, undistorted_image, A, D, A);
     namedWindow(win_raw_img);
     cv::imshow(win_raw_img, original_image);
-    namedWindow(win_undist_img);
 
+    cv::Mat undistorted_image, gray;
     cv::Mat image_copy;
+    // cv::undistort(original_image, undistorted_image, A, D, A);
+    // image_copy = undistorted_image.clone();
+    // namedWindow(win_undist_img);
+    // cv::imshow(win_undist_img, undistorted_image);
+    cv::remap(original_image, undistorted_image, map1, map2, cv::INTER_LINEAR);
     image_copy = undistorted_image.clone();
-    cv::imshow(win_undist_img, undistorted_image);
+    namedWindow(win_rect_img);
+    cv::imshow(win_rect_img, undistorted_image);
     cv::waitKey(1);
 
     cv::Size boardSize;

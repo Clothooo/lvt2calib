@@ -6,7 +6,7 @@
   
   <arg name="ifCompressed" default="false"/>
   <arg name="image_tp" default="/thermal_cam/thermal_image"/>
-  <arg name="cam_info_filename" default="intrinsic.txt"/>
+  <arg name="cam_info_filename" default="intrinsic.yaml"/>
   <arg name="ns_" default="camera"/>
 
   <!-- camera type -->
@@ -48,7 +48,6 @@
     </node>
 
     <node pkg="tf" type="static_transform_publisher" name="stereo_ros_tf" args="0 0 0 -1.57079632679 0 -1.57079632679 stereo stereo_camera 100"/>
-
   </group>
 
 </launch>
