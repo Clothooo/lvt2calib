@@ -1,0 +1,16 @@
+<launch>
+    <arg name="cloud_in" default="/ouster/points"/>
+    <arg name="cloud_out" default="$(arg cloud_in)_trans"/>
+    <arg name="source_frame" default="os_sensor"/>
+    <arg name="target_frame" default="os_scanner"/>
+
+    <node name="tf_$(arg source_frame)_to_$(arg target_frame)" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0 0 0 3.14159 $(arg source_frame) $(arg target_frame)" />
+
+    <!-- Transform point cloud -->
+    <node pkg="lvt2calib" type="transform_point_cloud" name="transform_point_cloud" output="screen">
+        <remap from="~cloud_in" to="$(arg cloud_in)"/>
+        <remap from="~cloud_out" to="$(arg cloud_out)"/>
+        <param name="target_frame" value="$(arg target_frame)"/>
+    </node>
+
+</launch>

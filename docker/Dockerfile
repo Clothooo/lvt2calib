@@ -57,7 +57,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8 
 ENV ROS_DISTRO noetic
-ENV ROBOT_ID 0
 
 # Env vars for the nvidia-container-runtime.
 ENV NVIDIA_VISIBLE_DEVICES all

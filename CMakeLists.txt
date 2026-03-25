@@ -25,6 +25,8 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   cmake_modules
   message_generation
+  tf2_ros
+  tf2_sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
