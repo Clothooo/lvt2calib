@@ -256,6 +256,17 @@ target_link_libraries(ouster_pattern_circle
   ${PCL_LIBRARIES}
 )
 
+add_executable(robosense_pattern src/lidar/robosense_pattern.cpp)
+add_dependencies(robosense_pattern
+  ${catkin_EXPORTED_TARGETS}
+  lvt2calib_generate_messages_cpp
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(robosense_pattern
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+)
+
 add_executable(cam_pattern src/camera/cam_pattern.cpp)
 add_dependencies(cam_pattern 
   ${catkin_EXPORTED_TARGETS}
@@ -312,6 +323,15 @@ target_link_libraries(extrinsic_calib_l2l
   ${CERES_LIBRARIES}
 )
 
+add_executable(transform_point_cloud src/transform_point_cloud.cpp)
+add_dependencies(transform_point_cloud
+  ${catkin_EXPORTED_TARGETS}
+)
+target_link_libraries(transform_point_cloud
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############
@@ -366,5 +386,4 @@ target_link_libraries(extrinsic_calib_l2l
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
 
